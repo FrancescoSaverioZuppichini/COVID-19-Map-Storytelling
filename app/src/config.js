@@ -1,12 +1,12 @@
 var config = {
-    style: 'mapbox://styles/mapbox/streets-v11',
+    style: 'mapbox://styles/mapbox/dark-v10',
     accessToken: 'pk.eyJ1IjoienVwcGlmIiwiYSI6ImNqdm96Z3d2ejFibG80OXZuZWdwMWgyemwifQ.aFnHrPBYUqnYcK2jAwzAZA',
     showMarkers: true,
     theme: 'light',
     alignment: 'left',
-    title: 'COVIS-19',
-    subtitle: 'A story told by maps',
-    byline: 'By a Francesco Saverio Zuppichini',
+    // title: 'COVIS-19',
+    // subtitle: 'A story told by maps',
+    // byline: 'By a Francesco Saverio Zuppichini',
     footer: 'Source: source citations, etc.',
     chapters: [
         {
