@@ -17,7 +17,7 @@ var config = {
             location: {
                 longitude: 114.301859,
                 latitude: 30.592357,
-                zoom: 10,
+                zoom: 8,
                 pitch: 60,
                 bearing: 0
             },
@@ -35,17 +35,33 @@ var config = {
             ]
         },
         {
-            id: 'chap1',
+            id: 'chap2',
             title: 'Second Title',
             image: './path/to/image/source.png',
             description: 'Copy these sections to add to your story.',
             location: {
-                longitude: -77.020636, 
-                latitude: 38.886900,
-                zoom: 13.5,
+                longitude: 114.301859,
+                latitude: 30.592357,
+                zoom: 12,
                 pitch: 60,
-                bearing: -43.2
+                bearing: 0
             },
+            onChapterEnter: [],
+            onChapterExit: []
+        },
+        {
+            id: 'chap3',
+            title: 'Second Title',
+            image: './path/to/image/source.png',
+            description: 'Copy these sections to add to your story.',
+            location: {
+                longitude: 10.993596,
+                latitude: 45.416064,
+                zoom: 14,
+                pitch: 60,
+                bearing: 0
+            },
+            duration: 500,
             onChapterEnter: [],
             onChapterExit: []
         }
