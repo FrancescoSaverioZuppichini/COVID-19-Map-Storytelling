@@ -10,13 +10,13 @@ var config = {
     footer: 'Source: source citations, etc.',
     chapters: [
         {
-            id: 'slug-style-id',
+            id: 'chap0',
             title: 'Display Title',
             image: './path/to/image/source.png',
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             location: {
-                center: [-122.418398, 37.759483],
-                zoom: 13.5,
+                center: [114.301859, 30.592357],
+                zoom: 10,
                 pitch: 60,
                 bearing: 0
             },
@@ -34,7 +34,7 @@ var config = {
             ]
         },
         {
-            id: 'other-identifier',
+            id: 'chap1',
             title: 'Second Title',
             image: './path/to/image/source.png',
             description: 'Copy these sections to add to your story.',

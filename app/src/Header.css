@@ -1,0 +1,11 @@
+#app-header {
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: red 
+}
+
+.slide {
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: white 
+}
