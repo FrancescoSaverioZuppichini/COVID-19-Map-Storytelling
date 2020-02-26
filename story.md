@@ -18,7 +18,9 @@ By Jan 2, 2020, 41 admitted hospital patients had been identified as having labo
 syndrome coronavirus and was associated with ICU admission and high mortality
 infection.
 
-Jin Yin-tan Hospital 
+![alt](https://www.straitstimes.com/sites/default/files/styles/article_pictrure_780x520_/public/articles/2020/01/21/rk_wuhanmedicalcentre_210120.jpg?itok=-NUIsORX&timestamp=1579562872)
+
+Jinyintan Hospital 
 
 [source](http://www.thelancet-press.com/embargo/coronavirus1.pdf)
 

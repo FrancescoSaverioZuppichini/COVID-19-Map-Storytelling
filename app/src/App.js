@@ -6,6 +6,9 @@ import { StaticMap } from 'react-map-gl'
 import scrollama from 'scrollama'
 import Chapter from './Chapter'
 import { easeCubic } from 'd3-ease'
+import { GeoJsonLayer } from '@deck.gl/layers';
+import axios from 'axios'
+import { Marker } from 'react-map-gl';
 
 const layerTypes = {
 	fill: ['fill-opacity'],
@@ -37,15 +40,18 @@ function Intro() {
 	)
 }
 
+const alignments = {
+	left: 'lefty',
+	center: 'centered',
+	right: 'righty'
+}
+
 function Chapters({ chapters, theme, alignment, currentChapterID }) {
 	return (
-		<div>
+		<div id="story">
 			<div id="features">
 				{chapters.map((chapter) => (
-					<Chapter key={chapter.id}
-						theme={theme}
-						{...chapter}
-						currentChapterID={currentChapterID} />
+					<Chapter key={chapter.id} theme={theme} {...chapter} currentChapterID={currentChapterID} />
 				))}
 			</div>
 		</div>
@@ -76,7 +82,13 @@ export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
 		viewState: initialViewState,
-		interact: true
+		interact: true,
+		geoCountries: []
+	}
+
+	componentDidMount() {
+		axios.get('/countries.geojson')
+			.then(({ data }) => this.setState({ geoCountries: data }))
 	}
 
 	mapOnLoad = () => {
@@ -97,6 +109,7 @@ export default class App extends Component {
 			.onStepEnter((response) => {
 				// we want to find out chapter and then move to it
 				const chapter = config.chapters.find((chap) => chap.id === response.element.id)
+				console.log(chapter)
 				if (chapter.location) {
 					this.setState({
 						currentChapter: chapter,
@@ -126,23 +139,63 @@ export default class App extends Component {
 		this.setState({ viewState })
 	}
 
+	getGeoLayer(countries) {
+		let data = []
+		if (countries && this.state.geoCountries.features) {
+			const features = this.state.geoCountries.features.filter(d => countries.includes(d.properties.ADMIN))
+			data = { type: this.state.geoCountries.type, features }
+			console.log(data)
+		}
+
+		const layer = new GeoJsonLayer({
+			id: 'geojson-layer',
+			data: data,
+			pickable: true,
+			stroked: false,
+			filled: true,
+			extruded: true,
+			lineWidthScale: 20,
+			lineWidthMinPixels: 2,
+			getFillColor: d => [155, 0, 0, 50],
+			// getLineColor: d => [255, 0, 0, 255],
+			getRadius: 100,
+			getLineWidth: 1,
+			getElevation: 30,
+			onHover: ({ object, x, y }) => {
+				console.log(object)
+				//   const tooltip = object.properties.name || object.properties.station;
+				/* Update tooltip
+				   http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
+				*/
+			}
+		});
+
+		return layer
+	}
+
 	render() {
 		const theme = config.theme
-		const style = {  zIndex: -1, position: 'fixed' }
+		const style = { zIndex: -1, position: 'fixed' }
 		return (
 			<div>
 				<Title {...config} />
-				<Intro />
 				<DeckGL
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
+					layers={[this.getGeoLayer(this.state.currentChapter.countries)]}
 					style={style}
 				>
 					<StaticMap
 						mapStyle='mapbox://styles/mapbox/dark-v9'
 						mapboxApiAccessToken={config.accessToken}
-						onLoad={this.mapOnLoad} />
+						onLoad={this.mapOnLoad}>
+						{this.state.currentChapter.marker ? (<Marker {...this.state.currentChapter.marker} >
+							<img src="https://i.imgur.com/MK4NUzI.png" />
+						</Marker>) : ''}
+
+
+					</StaticMap>
 				</DeckGL>
 
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} />
