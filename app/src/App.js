@@ -144,7 +144,6 @@ export default class App extends Component {
 		if (countries && this.state.geoCountries.features) {
 			const features = this.state.geoCountries.features.filter(d => countries.includes(d.properties.ADMIN))
 			data = { type: this.state.geoCountries.type, features }
-			console.log(data)
 		}
 
 		const layer = new GeoJsonLayer({

@@ -61,13 +61,13 @@ a, a:hover, a:visited {
   opacity: 0.25;
 }
 .step.active {
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .step div {
   padding:  25px 50px;
   line-height: 25px;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .step img {
