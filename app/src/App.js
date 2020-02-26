@@ -1,32 +1,21 @@
 import React, { Component } from 'react'
-// import Header from './Header'
-// import Story  from './Story'
+import './App.css';
 import config from './config.js'
-// import DeckGL from '@deck.gl/react';
-import { LineLayer } from '@deck.gl/layers'
 import DeckGL, { MapController, FlyToInterpolator, TRANSITION_EVENTS } from 'deck.gl'
 import { StaticMap } from 'react-map-gl'
-// import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
 import scrollama from 'scrollama'
 import Chapter from './Chapter'
-import './Story.css'
 import { easeCubic } from 'd3-ease'
-import mapboxgl from 'mapbox-gl'
 
 const layerTypes = {
-	fill: [ 'fill-opacity' ],
-	line: [ 'line-opacity' ],
-	circle: [ 'circle-opacity', 'circle-stroke-opacity' ],
-	symbol: [ 'icon-opacity', 'text-opacity' ],
-	raster: [ 'raster-opacity' ],
-	'fill-extrusion': [ 'fill-extrusion-opacity' ]
+	fill: ['fill-opacity'],
+	line: ['line-opacity'],
+	circle: ['circle-opacity', 'circle-stroke-opacity'],
+	symbol: ['icon-opacity', 'text-opacity'],
+	raster: ['raster-opacity'],
+	'fill-extrusion': ['fill-extrusion-opacity']
 }
 
-const alignments = {
-	left: 'lefty',
-	center: 'centered',
-	right: 'righty'
-}
 
 function Title({ title, subtitle, byline, theme }) {
 	return (
@@ -42,12 +31,21 @@ function Title({ title, subtitle, byline, theme }) {
 	)
 }
 
+function Intro() {
+	return (
+		<div></div>
+	)
+}
+
 function Chapters({ chapters, theme, alignment, currentChapterID }) {
 	return (
-		<div id="story">
-			<div id="features" className={alignments[alignment]}>
+		<div>
+			<div id="features">
 				{chapters.map((chapter) => (
-					<Chapter key={chapter.id} theme={theme} {...chapter} currentChapterID={currentChapterID} />
+					<Chapter key={chapter.id}
+						theme={theme}
+						{...chapter}
+						currentChapterID={currentChapterID} />
 				))}
 			</div>
 		</div>
@@ -56,7 +54,7 @@ function Chapters({ chapters, theme, alignment, currentChapterID }) {
 
 function Footer({ footer, theme }) {
 	return (
-		<div>
+		<div >
 			{footer && (
 				<div id="footer" className={theme}>
 					<p>{footer}</p>
@@ -66,10 +64,19 @@ function Footer({ footer, theme }) {
 	)
 }
 
+const initialViewState = {
+	longitude: 15.38585,
+	latitude: 26.68114,
+	zoom: 2,
+	pitch: 0,
+	bearing: 0
+}
+
 export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
-		viewState: config.chapters[0].location
+		viewState: initialViewState,
+		interact: true
 	}
 
 	mapOnLoad = () => {
@@ -90,19 +97,29 @@ export default class App extends Component {
 			.onStepEnter((response) => {
 				// we want to find out chapter and then move to it
 				const chapter = config.chapters.find((chap) => chap.id === response.element.id)
-				this.setState({
-					currentChapter: chapter,
-					viewState: {
-						...chapter.location,
-						...{
-							transitionEasing: transitions[chapter.transition || 'ease'], // TODO we should check if we are going backwards or towards
-							transitionDuration: chapter.duration || 1000,
-							transitionInterpolator: new FlyToInterpolator()
+				if (chapter.location) {
+					this.setState({
+						currentChapter: chapter,
+						interact: false,
+						viewState: {
+							...chapter.location,
+							...{
+								transitionEasing: transitions[chapter.transition || 'ease'], // TODO we should check if we are going backwards or towards
+								transitionDuration: chapter.duration || 1000,
+								transitionInterpolator: new FlyToInterpolator()
+							}
 						}
-					}
-				})
+					})
+				} else {
+					this.setState({
+						currentChapter: chapter
+					})
+				}
+
 			})
-			.onStepExit((response) => {})
+			.onStepExit((response) => {
+
+			})
 	}
 
 	onViewStateChange = ({ viewState }) => {
@@ -111,20 +128,25 @@ export default class App extends Component {
 
 	render() {
 		const theme = config.theme
-		const currentChapterID = this.state.currentChapter.id
-		console.log('wee')
+		const style = this.state.isInIntro ? { position: 'fixed' } : {  zIndex: -1, position: 'fixed' }
+		console.log(style)
 		return (
 			<div>
 				<Title {...config} />
+				<Intro />
 				<DeckGL
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
-					style={{ zIndex: -1, position: 'fixed' }} // we need to use the `MapController` but it will interfere with the scrolling, so we set the z-index to -1
+					style={style}
 				>
-					<StaticMap mapboxApiAccessToken={config.accessToken} onLoad={this.mapOnLoad} />
+					<StaticMap
+						mapStyle='mapbox://styles/mapbox/dark-v9'
+						mapboxApiAccessToken={config.accessToken}
+						onLoad={this.mapOnLoad} />
 				</DeckGL>
-				<Chapters {...config}/>
+
+				<Chapters {...config} currentChapterID={this.state.currentChapter.id} />
 				<Footer />
 			</div>
 		)
