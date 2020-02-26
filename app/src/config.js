@@ -41,7 +41,7 @@ Health officials in China were monitoring it to ensure that the outbreak would n
             location: {
                 longitude: 114.301859,
                 latitude: 30.592357,
-                zoom: 8,
+                zoom: 10,
                 pitch: 60,
                 bearing: 0
             },
