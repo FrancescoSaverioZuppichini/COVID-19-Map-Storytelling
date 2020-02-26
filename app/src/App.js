@@ -128,8 +128,7 @@ export default class App extends Component {
 
 	render() {
 		const theme = config.theme
-		const style = this.state.isInIntro ? { position: 'fixed' } : {  zIndex: -1, position: 'fixed' }
-		console.log(style)
+		const style = {  zIndex: -1, position: 'fixed' }
 		return (
 			<div>
 				<Title {...config} />
