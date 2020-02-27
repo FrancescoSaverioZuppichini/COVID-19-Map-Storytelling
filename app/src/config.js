@@ -28,8 +28,8 @@ Chinese authorities starts to treat different cases of pneumonia.
 		},
 		{
 			id: 'chap1',
+			date: '31-12-2019',
 			text: `
-31/12/2019
 ## Chinese authorities were treating dozens of cases of pneumonia of unknown cause
 
 The government in Wuhan, China, confirmed that health authorities were treating dozens of cases. 
@@ -48,8 +48,8 @@ Health officials in China were monitoring it to ensure that the outbreak would n
 		},
 		{
 			id: 'chap2',
+			date: '02-01-2020',
 			text: `
-02/01/2020
 ## New virus confirmed
 [source](http://www.thelancet-press.com/embargo/coronavirus1.pdf)
 
@@ -74,7 +74,8 @@ infection.
 		},
 		{
 			id: 'chap3',
-			text: `22/01/2020
+			date: '01-22-2020',
+			text: `
 ## Virus starts to spread outside China
 
 First cases in Hong Kong, Macau, Taiwan, US, Japan, Thailand, South Korea
@@ -119,8 +120,9 @@ Yes, places like this one exist on hearth.
 		},
 
 		{
-			id: 'chap3',
+			id: 'chap5',
 			text: ``,
+			date: '',
 			location: {
 				longitude: 10.993596,
 				latitude: 45.416064,

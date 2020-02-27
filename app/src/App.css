@@ -13,10 +13,16 @@ a, a:hover, a:visited {
   position: fixed;
   z-index: -5;
 }
+#story {
+  width: 50vw;
+  z-index: 100;
+}
 #header {
   margin: 3vh auto;
   width: 90vw;
   padding: 2vh;
+  z-index: 99;
+  position: relative;
   text-align: center;
 }
 #footer {
@@ -39,11 +45,11 @@ a, a:hover, a:visited {
 }
 .lefty {
   width: 33vw;
-  margin-left: 5vw;
+  padding-left: 5vw;
 }
 .righty {
   width: 33vw;
-  margin-left: 62vw;
+  padding-left: 62vw;
 }
 .light {
   color: #444;
