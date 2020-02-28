@@ -58,6 +58,12 @@ function Chapters({ chapters, theme, alignment, currentChapterID }) {
   )
 }
 
+function HazardButton({ theme, onClick }) {
+  return <button id='hazardButton' onClick={onClick} className='btn'>
+    <img src='/biohazard.png'></img>
+  </button>
+}
+
 function Footer({ footer, theme }) {
   return (
     <div>
@@ -182,6 +188,8 @@ export default class App extends Component {
     return layer
   }
 
+  onHazardButton = () => {}
+
   render() {
     const theme = config.theme
     const style = { zIndex: -1, position: "fixed" }
@@ -211,6 +219,7 @@ export default class App extends Component {
         </DeckGL>
 
         <Chapters {...config} currentChapterID={this.state.currentChapter.id} />
+        <HazardButton theme={theme} onClick={this.onHazardButton} />
         <Footer />
       </div>
     )
