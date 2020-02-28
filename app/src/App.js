@@ -13,6 +13,9 @@ import { easeCubic } from "d3-ease"
 import { GeoJsonLayer } from "@deck.gl/layers"
 import axios from "axios"
 import { Marker } from "react-map-gl"
+import { ThemeProvider } from 'emotion-theming'
+import theme from '@rebass/preset'
+import { Button } from 'rebass'
 
 const layerTypes = {
   fill: ["fill-opacity"],
@@ -59,9 +62,9 @@ function Chapters({ chapters, theme, alignment, currentChapterID }) {
 }
 
 function HazardButton({ theme, onClick }) {
-  return <button id='hazardButton' onClick={onClick} className='btn'>
+  return <Button id='hazardButton' onClick={onClick} className='btn'>
     <img src='/biohazard.png'></img>
-  </button>
+  </Button>
 }
 
 function Footer({ footer, theme }) {
@@ -191,11 +194,11 @@ export default class App extends Component {
   onHazardButton = () => {}
 
   render() {
-    const theme = config.theme
     const style = { zIndex: -1, position: "fixed" }
     return (
-      <div>
-        <Title {...config} />
+      <ThemeProvider theme={theme}>
+          <div>
+          <Title {...config} />
         <DeckGL
           viewState={this.state.viewState}
           onViewStateChange={this.onViewStateChange}
@@ -219,9 +222,11 @@ export default class App extends Component {
         </DeckGL>
 
         <Chapters {...config} currentChapterID={this.state.currentChapter.id} />
-        <HazardButton theme={theme} onClick={this.onHazardButton} />
+        <HazardButton theme={config.theme} onClick={this.onHazardButton} />
         <Footer />
-      </div>
+        </div>
+        )}
+        </ThemeProvider>
     )
   }
 }
