@@ -35,15 +35,21 @@ a:visited {
 }
 
 #hazardButton{
-  z-index: 99;
+  z-index: 999;
   position: fixed;
   right: 24px;
   bottom: 24px;
   border-radius: 50px;
-  width: 56px;
-  height: 56px;
+  width: 68px;
+  height: 68px;
+  background-color: #fafafa;
+
 }
 
+.btn > img {
+  padding: 8px;
+  width:100%;
+}
 .btn {
   position: relative;
 
@@ -58,19 +64,14 @@ a:visited {
   border-radius: 2px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
   
-  background-color: #fafafa;
+  background-color: #2ecc71;
   color: #ecf0f1;
   
   transition: background-color .3s;
 }
 
-.btn > img {
-  padding: 8px;
-  width:100%;
-}
-.btn.active {
-  background-color: #d6d6d6;
-
+.btn:hover, .btn:focus {
+  background-color: #27ae60;
 }
 
 .btn > * {
@@ -116,6 +117,7 @@ a:visited {
   box-sizing: border-box;
 }
 
+
 #features {
   z-index: 99;
 }
@@ -152,7 +154,7 @@ a:visited {
 .step div {
   padding: 25px 50px;
   line-height: 25px;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .step img {
