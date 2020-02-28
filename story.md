@@ -1,17 +1,9 @@
-### Chinese authorities were treating dozens of cases of pneumonia of unknown cause.
-## 31/12/2019 
+### Chinese authorities were treating dozens of cases of pneumonia of unknown cause
+date: 31-12-2019 
+The government in Wuhan, China, confirmed that health authorities were treating dozens of cases. 
+At the time, there was no evidence that the virus was readily spread by humans. 
+Health officials in China were monitoring it to ensure that the outbreak would not develop into something more severe.
 
-The government in Wuhan, China, confirmed that health authorities were treating dozens of cases. Days later, researchers in China identified a new virus behind an illness that had infected dozens of people in Asia. At the time, there was no evidence that the virus was readily spread by humans. Health officials in China were monitoring it to ensure that the outbreak would not develop into something more severe.
-
-```
- location: {
-                longitude: 114.301859,
-                latitude: 30.592357,
-                zoom: 8,
-                pitch: 60,
-                bearing: 0
-        
-```
 
 ## 02/12/2019
 By Jan 2, 2020, 41 admitted hospital patients had been identified as having laboratory-confirmed 2019-nCoV. The 2019-nCoV infection caused clusters of severe respiratory illness similar to severe acute respiratory
