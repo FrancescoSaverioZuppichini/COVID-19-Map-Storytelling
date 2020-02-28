@@ -2,6 +2,7 @@
   "name": "react-js",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "axios": "^0.19.2",
     "d3": "^3.5.17",
