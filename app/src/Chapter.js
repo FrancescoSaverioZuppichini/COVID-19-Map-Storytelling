@@ -16,9 +16,12 @@ export default function Chapter({
   alignment = "left",
   date = ""
 }) {
+  // old school class conditioning
   let classList = id === currentChapterID ? "step active" : "step"
-  classList += slide ? " slide" : ""
+  // if slide the want to also apply the theme to color the overall background
+  classList += slide ? ` slide ${theme}` : ""
   classList += ` ${alignments[alignment]}`
+
   return (
     <div id={id} className={classList}>
       <div className={theme}>

@@ -24,7 +24,7 @@ Chinese authorities starts to treat different cases of pneumonia.
 				pitch: 0,
 				bearing: 0
 			},
-			countries: [ 'China' ]
+			countries: [ 'China' ],
 		},
 		{
 			id: 'chap1',

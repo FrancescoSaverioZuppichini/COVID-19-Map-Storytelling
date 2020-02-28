@@ -184,7 +184,7 @@ export default class App extends Component {
 
   render() {
     const theme = config.theme
-    const style = { position: "fixed" }
+    const style = { zIndex: -1, position: "fixed" }
     return (
       <div>
         <Title {...config} />
