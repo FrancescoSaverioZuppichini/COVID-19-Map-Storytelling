@@ -10,13 +10,7 @@ var config = {
 	footer: 'Source: source citations, etc.',
 	chapters: [
 		{
-			id: 'chap0',
-			text: `December 2019
-## New pneumonia of unknown cause
-
-Chinese authorities starts to treat different cases of pneumonia.
-
-`,
+			id: '0', // file name
 			location: {
 				longitude: 102.63073,
 				latitude: 35.53723,
@@ -27,15 +21,7 @@ Chinese authorities starts to treat different cases of pneumonia.
 			countries: [ 'China' ],
 		},
 		{
-			id: 'chap1',
-			date: '31-12-2019',
-			text: `
-## Chinese authorities were treating dozens of cases of pneumonia of unknown cause
-
-The government in Wuhan, China, confirmed that health authorities were treating dozens of cases. 
-At the time, there was no evidence that the virus was readily spread by humans. 
-Health officials in China were monitoring it to ensure that the outbreak would not develop into something more severe.
-            `,
+			id: '1',
 			location: {
 				longitude: 114.301859,
 				latitude: 30.592357,
@@ -44,22 +30,9 @@ Health officials in China were monitoring it to ensure that the outbreak would n
 				bearing: 0
             },
             duration: 4000,
-
 		},
 		{
-			id: 'chap2',
-			date: '02-01-2020',
-			text: `
-## New virus confirmed
-[source](http://www.thelancet-press.com/embargo/coronavirus1.pdf)
-
-By Jan 2, 2020, 41 pation were addmitted at Jinyintan hospital patients. They had been identified as having laboratory-confirmed 2019-nCoV.
-The 2019-nCoV infection caused clusters of severe respiratory illness similar to severe acute respiratory
-syndrome coronavirus and was associated with ICU admission and high mortality
-infection.
-
-![alt](https://www.straitstimes.com/sites/default/files/styles/article_pictrure_780x520_/public/articles/2020/01/21/rk_wuhanmedicalcentre_210120.jpg?itok=-NUIsORX&timestamp=1579562872)
-            `,
+			id: '2',
 			location: {
 				longitude: 114.275273,
 				latitude: 30.66588,

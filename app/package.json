@@ -9,6 +9,7 @@
     "d3-ease": "^1.0.6",
     "deck.gl": "^8.0.16",
     "mapbox-gl": "1.5.0",
+    "markdown-to-json": "^0.5.4",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-map-gl": "^5.2.3",
