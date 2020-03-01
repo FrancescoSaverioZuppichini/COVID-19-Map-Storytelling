@@ -46,13 +46,7 @@ var config = {
 			}
 		},
 		{
-			id: 'chap3',
-			date: '01-22-2020',
-			text: `
-## Virus starts to spread outside China
-
-First cases in Hong Kong, Macau, Taiwan, US, Japan, Thailand, South Korea
-`,
+			id: '3',
 			location: {
 				longitude:  9.86052,
 				latitude: 27.91264 ,
@@ -65,19 +59,7 @@ First cases in Hong Kong, Macau, Taiwan, US, Japan, Thailand, South Korea
         },
         
         {
-			id: 'chap4',
-            text: `
-###  Huanan seafood wholesale market   
-
-[Research article](https://onlinelibrary.wiley.com/doi/10.1002/jmv.25682) suggest the virus could have been spread from the wildlife animals at the Huanan seafood wholesale market. There, poultry, snake, bats, and other farm animals were also sold.
-
-![alt](https://i.dailymail.co.uk/1s/2020/01/27/18/23944578-7935167-image-a-3_1580149848978.jpg)
-
-![alt](https://i.dailymail.co.uk/1s/2020/01/27/18/23944296-7935167-image-a-5_1580149868513.jpg)
-
-
-Yes, places like this one exist on hearth.
-        `,
+			id: '4',
 			location: {
 				longitude: 114.258286,
 				latitude: 30.617847,
@@ -91,19 +73,6 @@ Yes, places like this one exist on hearth.
             },
             duration: 3000,
 		},
-
-		{
-			id: 'chap5',
-			text: ``,
-			date: '',
-			location: {
-				longitude: 10.993596,
-				latitude: 45.416064,
-				zoom: 3,
-				pitch: 60,
-				bearing: 0
-			}
-		}
 	]
 }
 
