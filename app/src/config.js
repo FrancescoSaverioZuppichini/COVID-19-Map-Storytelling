@@ -66,13 +66,44 @@ var config = {
 				zoom: 14,
 				pitch: 30,
 				bearing: 0
-            },
-            marker: {
-				longitude: 114.261505,
-				latitude: 30.617792,
-            },
-            duration: 3000,
+			},
+			marker: {
+				longitude:  114.261636,
+				latitude: 30.617810,
+			},
 		},
+		{
+			id: '5',
+			location: {
+				longitude: 104.68358,
+				latitude: 33.21781,
+				zoom: 4,
+				pitch: 30,
+				bearing: 0
+			},
+			duration: 3000,
+		},
+		{
+			id: '6',
+			location: {
+				longitude: -117.60365,
+				latitude: 34.05862,
+				zoom: 12,
+				pitch: 0,
+				bearing: 0
+			},
+			marker: {
+				longitude: -117.60365,
+				latitude: 34.05862,
+			},
+			duration: 5000,
+		},
+		{
+			id: '7',
+			slide: true
+		},
+
+
 	]
 }
 

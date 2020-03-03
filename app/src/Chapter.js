@@ -19,7 +19,7 @@ export default function Chapter({
   // old school class conditioning
   let classList = id === currentChapterID ? "step active" : "step"
   // if slide the want to also apply the theme to color the overall background
-  classList += slide ? ` slide ${theme}` : ""
+  classList += slide ? ` slide` : ""
   classList += ` ${alignments[alignment]}`
 
   return (

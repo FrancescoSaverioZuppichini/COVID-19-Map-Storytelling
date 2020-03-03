@@ -97,8 +97,9 @@ a:visited {
 }
 
 .slide {
-  padding: 0;
-  margin: 0;
+  padding-left: 0;
+  /* padding: 0; */
+  /* margin: 0; */
   width: 100%;
   min-height: 50vh;
 }
