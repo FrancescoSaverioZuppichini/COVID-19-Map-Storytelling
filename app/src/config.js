@@ -136,6 +136,62 @@ var config = {
 			},
             countries: [ 'Germany']
 		},
+		{
+			id: '11',
+			location: {
+				longitude:  9.86052,
+				latitude: 27.91264 ,
+				zoom: 2,
+				pitch: 0,
+				bearing: 0
+			},
+			duration: 3000
+		},
+		{
+			id: '12',
+			location: {
+				longitude:  9.86052,
+				latitude: 27.91264 ,
+				zoom: 3,
+				pitch: 0,
+				bearing: 0
+			},
+			duration: 1000
+		},
+		{
+			id: '13',
+			location: {
+				longitude: 139.56233,
+				latitude: 35.43110 ,
+				zoom: 11,
+				pitch: 0,
+				bearing: 0
+			},
+			duration: 4000
+		},
+		{
+			id: '14',
+			location: {
+				longitude:  -107.68517,
+				latitude: 38.67691 ,
+				zoom: 3,
+				pitch: 0,
+				bearing: 0
+			},
+			duration: 3000,
+			countries: [ 'United States of America' ]
+		},
+		{
+			id: '15',
+			location: {
+				longitude:  -107.68517,
+				latitude: 38.67691 ,
+				zoom: 4,
+				pitch: 0,
+				bearing: 0
+			},
+			duration: 3000
+		},
 
 	]
 }

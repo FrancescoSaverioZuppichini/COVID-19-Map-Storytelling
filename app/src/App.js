@@ -196,7 +196,7 @@ export default class App extends Component {
 					style={style}
 				>
 					<StaticMap
-						mapStyle="mapbox://styles/mapbox/dark-v9"
+						mapStyle="mapbox://styles/zuppif/ck7dq0q6x1hwo1inu7n734ou1"
 						mapboxApiAccessToken={config.accessToken}
 						onLoad={this.mapOnLoad}
 					>
