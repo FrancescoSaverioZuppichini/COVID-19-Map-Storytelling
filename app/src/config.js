@@ -101,8 +101,41 @@ var config = {
 		{
 			id: '7',
 			slide: true
+        },
+        {
+			id: '8',
+			location: {
+				longitude:  114.275273,
+				latitude: 30.66588,
+				zoom: 6,
+				pitch: 45,
+				bearing: 0
+			},
+			duration: 2000,
+        },
+        {
+			id: '9',
+			location: {
+				longitude:   7.33942,
+				latitude: 50.81065,
+				zoom: 5,
+				pitch: 30,
+				bearing: 0
+			},
+            duration: 3000,
+            countries: [ 'Germany']
+        },
+        {
+			id: '10',
+			location: {
+				longitude:   7.33942,
+				latitude: 50.81065,
+				zoom: 6,
+				pitch: 30,
+				bearing: 0
+			},
+            countries: [ 'Germany']
 		},
-
 
 	]
 }
