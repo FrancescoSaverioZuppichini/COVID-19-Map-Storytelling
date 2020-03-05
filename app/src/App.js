@@ -13,15 +13,6 @@ import { Marker } from 'react-map-gl'
 // import theme from '@rebass/preset'
 // import { Button } from 'rebass'
 
-const layerTypes = {
-	fill: ['fill-opacity'],
-	line: ['line-opacity'],
-	circle: ['circle-opacity', 'circle-stroke-opacity'],
-	symbol: ['icon-opacity', 'text-opacity'],
-	raster: ['raster-opacity'],
-	'fill-extrusion': ['fill-extrusion-opacity']
-}
-
 function Title({ title, subtitle, byline, theme }) {
 	return (
 		<div>
@@ -40,7 +31,7 @@ function Intro() {
 	return <div />
 }
 
-function Chapters({ chapters, theme, alignment, currentChapterID }) {
+function Chapters({ chapters, theme, currentChapterID }) {
 	return (
 		<div id="story">
 			<div id="features">
@@ -92,12 +83,31 @@ export default class App extends Component {
 		axios.get('/countries-small.geojson').then(({ data }) => this.setState({ geoCountries: data }))
 	}
 
-	mapOnLoad = () => {
-		// map our transitions function to a string for easy access
+	setChapter = (chapter) => {
 		const transitions = {
 			break: () => TRANSITION_EVENTS.BREAK,
 			ease: easeCubic
 		}
+		// if we are scrolling up we want to keep the previos animation duration
+		const weAreGoingBack = this.state.currentChapter.id > chapter.id
+		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
+
+		this.setState({
+			currentChapter: chapter,
+			viewState: {
+				...chapter.location,
+				...{
+					transitionEasing: transitions[chapter.transition || 'ease'], // TODO we should check if we are going backwards or towards
+					transitionDuration: duration || 1000,
+					transitionInterpolator: new FlyToInterpolator()
+				}
+			}
+		})
+	}
+
+	mapOnLoad = () => {
+		// map our transitions function to a string for easy access
+		
 
 		const scroller = scrollama()
 
@@ -114,20 +124,7 @@ export default class App extends Component {
 				const { data } = await axios.get(`/stories/${chapter.id}.md`)
 				chapter.text = data
 				if (chapter.location) {
-					const weAreGoingBack = this.state.currentChapter.id > chapter.id
-					let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
-
-					this.setState({
-						currentChapter: chapter,
-						viewState: {
-							...chapter.location,
-							...{
-								transitionEasing: transitions[chapter.transition || 'ease'], // TODO we should check if we are going backwards or towards
-								transitionDuration: duration || 1000,
-								transitionInterpolator: new FlyToInterpolator()
-							}
-						}
-					})
+					this.setChapter(chapter)
 				} else {
 					this.setState({
 						currentChapter: chapter

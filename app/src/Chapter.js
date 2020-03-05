@@ -7,6 +7,17 @@ const alignments = {
   right: "righty"
 }
 
+function DummyText() {
+  return (<div className="chapter-dummy">
+    <div className="chapter_date-dummy" />
+    <div className="chapter_title-dummy" />
+    <div className="chapter_text-dummy" />
+    <div className="chapter_text-dummy" />
+    <div className="chapter_text-dummy" />
+
+  </div>)
+}
+
 export default function Chapter({
   id,
   theme,
@@ -21,12 +32,12 @@ export default function Chapter({
   // if slide the want to also apply the theme to color the overall background
   classList += slide ? ` slide` : ""
   classList += ` ${alignments[alignment]}`
-
+  console.log('text')
   return (
     <div id={id} className={classList}>
       <div className={theme}>
         <p>{date}</p>
-        <ReactMarkdown source={text} />
+        {text ? <ReactMarkdown source={text} /> : <DummyText />}
       </div>
     </div>
   )
