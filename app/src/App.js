@@ -14,12 +14,12 @@ import { Marker } from 'react-map-gl'
 // import { Button } from 'rebass'
 
 const layerTypes = {
-	fill: [ 'fill-opacity' ],
-	line: [ 'line-opacity' ],
-	circle: [ 'circle-opacity', 'circle-stroke-opacity' ],
-	symbol: [ 'icon-opacity', 'text-opacity' ],
-	raster: [ 'raster-opacity' ],
-	'fill-extrusion': [ 'fill-extrusion-opacity' ]
+	fill: ['fill-opacity'],
+	line: ['line-opacity'],
+	circle: ['circle-opacity', 'circle-stroke-opacity'],
+	symbol: ['icon-opacity', 'text-opacity'],
+	raster: ['raster-opacity'],
+	'fill-extrusion': ['fill-extrusion-opacity']
 }
 
 function Title({ title, subtitle, byline, theme }) {
@@ -109,20 +109,21 @@ export default class App extends Component {
 			})
 			.onStepEnter(async (response) => {
 				// we want to find out chapter and then move to it
-        let chapter = config.chapters.find((chap) => chap.id === response.element.id)
-        // TODO would be nice to preload the text or show some loading content on the card
-        const { data } = await axios.get(`/stories/${chapter.id}.md`)
-        chapter.text = data
-
+				let chapter = config.chapters.find((chap) => chap.id === response.element.id)
+				// TODO would be nice to preload the text or show some loading content on the card
+				const { data } = await axios.get(`/stories/${chapter.id}.md`)
+				chapter.text = data
 				if (chapter.location) {
+					const weAreGoingBack = this.state.currentChapter.id > chapter.id
+					let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
+
 					this.setState({
 						currentChapter: chapter,
-						interact: false,
 						viewState: {
 							...chapter.location,
 							...{
 								transitionEasing: transitions[chapter.transition || 'ease'], // TODO we should check if we are going backwards or towards
-								transitionDuration: chapter.duration || 1000,
+								transitionDuration: duration || 1000,
 								transitionInterpolator: new FlyToInterpolator()
 							}
 						}
@@ -133,7 +134,8 @@ export default class App extends Component {
 					})
 				}
 			})
-			.onStepExit((response) => {})
+			.onStepExit(() => {
+			})
 	}
 
 	onViewStateChange = ({ viewState }) => {
@@ -164,7 +166,7 @@ export default class App extends Component {
 			extruded: true,
 			lineWidthScale: 20,
 			lineWidthMinPixels: 2,
-			getFillColor: (d) => [ 155, 0, 0, 50 ],
+			getFillColor: (d) => [155, 0, 0, 50],
 			// getLineColor: d => [255, 0, 0, 255],
 			getRadius: 100,
 			getLineWidth: 1,
@@ -181,7 +183,7 @@ export default class App extends Component {
 		return layer
 	}
 
-	onHazardButton = () => {}
+	onHazardButton = () => { }
 
 	render() {
 		const style = { zIndex: -1, position: 'fixed' }
@@ -192,7 +194,7 @@ export default class App extends Component {
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
-					layers={[ this.getGeoLayer(this.state.currentChapter.countries) ]}
+					layers={[this.getGeoLayer(this.state.currentChapter.countries)]}
 					style={style}
 				>
 					<StaticMap
@@ -205,8 +207,8 @@ export default class App extends Component {
 								<img src="https://i.imgur.com/MK4NUzI.png" />
 							</Marker>
 						) : (
-							''
-						)}
+								''
+							)}
 					</StaticMap>
 				</DeckGL>
 
