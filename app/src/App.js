@@ -95,7 +95,11 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
-		axios.get('/countries-small.geojson').then(({ data }) => this.setState({ geoCountries: data }))
+		// const geoDatas = [
+		// 	axios.get('/countries-small.geojson'),
+		// 	axios.get('/china-provinces.geojson')
+		// ])
+		axios.get('/china-provinces.geojson').then(({ data }) => this.setState({ geoCountries: data }))
 		this.getDataFromDate(this.state.date)
 	}
 
@@ -165,7 +169,7 @@ export default class App extends Component {
 
 		const layer = new GeoJsonLayer({
 			id: 'geojson-layer',
-			data: data,
+			data: this.state.geoCountries,
 			pickable: true,
 			stroked: false,
 			filled: true,
