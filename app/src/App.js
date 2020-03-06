@@ -63,6 +63,11 @@ function Footer({ footer, theme }) {
 	)
 }
 
+const transitions = {
+	break: () => TRANSITION_EVENTS.BREAK,
+	ease: easeCubic
+}
+
 const initialViewState = {
 	longitude: 15.38585,
 	latitude: 26.68114,
@@ -71,11 +76,16 @@ const initialViewState = {
 	bearing: 0
 }
 
+const WORLD_COORDINATE = {
+	latitude: 15.38585,
+	longitude: 26.68114
+}
+
 export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
 		viewState: initialViewState,
-		interact: true,
+		isInFullMap: false,
 		geoCountries: []
 	}
 
@@ -83,17 +93,21 @@ export default class App extends Component {
 		axios.get('/countries-small.geojson').then(({ data }) => this.setState({ geoCountries: data }))
 	}
 
-	setChapter = (chapter) => {
-		const transitions = {
-			break: () => TRANSITION_EVENTS.BREAK,
-			ease: easeCubic
-		}
+	extractDataFromChapter = ({ text }) => {
+		const firstLine = text.split('\n')[0]
+		const date = new Date(firstLine)
+
+		return date
+	}
+
+	setChapterLocation = (chapter) => {
 		// if we are scrolling up we want to keep the previos animation duration
 		const weAreGoingBack = this.state.currentChapter.id > chapter.id
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
 
 		this.setState({
 			currentChapter: chapter,
+			isInFullMap: false,
 			viewState: {
 				...chapter.location,
 				...{
@@ -107,7 +121,7 @@ export default class App extends Component {
 
 	mapOnLoad = () => {
 		// map our transitions function to a string for easy access
-		
+
 
 		const scroller = scrollama()
 
@@ -122,9 +136,12 @@ export default class App extends Component {
 				let chapter = config.chapters.find((chap) => chap.id === response.element.id)
 				// TODO would be nice to preload the text or show some loading content on the card
 				const { data } = await axios.get(`/stories/${chapter.id}.md`)
+				// update chapter obj
 				chapter.text = data
+				chapter.data = this.extractDataFromChapter(chapter)
+				// if we have a new location we want to move to it
 				if (chapter.location) {
-					this.setChapter(chapter)
+					this.setChapterLocation(chapter)
 				} else {
 					this.setState({
 						currentChapter: chapter
@@ -135,17 +152,14 @@ export default class App extends Component {
 			})
 	}
 
-	onViewStateChange = ({ viewState }) => {
-		this.setState({ viewState })
-	}
 	// TODO need to proxy!
-	// async getDataFromDate(date){
-	// 	const DATA_URL = 'https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_daily_reports/'
-	// 	const url = `${DATA_URL}${date}.csv`
+	async getDataFromDate(date){
+		const DATA_URL = 'https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_daily_reports/'
+		const url = `${DATA_URL}${date}.csv`
 
-	// 	const {data} = await axios.get(url)
-	// 	console.log(data)
-	// }
+		const {data} = await axios.get(url)
+		console.log(data)
+	}
 
 	getGeoLayer(countries) {
 		let data = []
@@ -180,10 +194,49 @@ export default class App extends Component {
 		return layer
 	}
 
-	onHazardButton = () => { }
+	onHazardButton = () => {
+		/***
+		 * Hazard button switch between full map view and the chapters view
+		 */
+		if (!this.state.isInFullMap) {
+			// display the whole world (a whole newwww worllldd)
+			const viewState = {
+				...WORLD_COORDINATE,
+				zoom: 2,
+				...{
+					transitionEasing: transitions['ease'],
+					transitionDuration: 2000,
+					transitionInterpolator: new FlyToInterpolator()
+				}
+			}
+			this.setState({
+				viewState,
+				isInFullMap: true,
+			})
+		} else {
+			// go back to the current chapter location
+			this.setChapterLocation(this.state.currentChapter)
+		}
+	}
+
+	onViewStateChange = ({ viewState }) => {
+		this.setState({ viewState })
+	}
+
+	mapStyle = () => {
+		/***
+		 * This function returns the style used by DECK.gl. 
+		 * When we are not in full map we need to set the z-index to -1 in onder
+		 * to disable the map controller.
+		 */
+		const zIndex = this.state.isInFullMap ? 99 : -1
+		return {
+			zIndex,
+			position: 'fixed'
+		}
+	}
 
 	render() {
-		const style = { zIndex: -1, position: 'fixed' }
 		return (
 			<div>
 				<Title {...config} />
@@ -192,7 +245,7 @@ export default class App extends Component {
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
 					layers={[this.getGeoLayer(this.state.currentChapter.countries)]}
-					style={style}
+					style={this.mapStyle()}
 				>
 					<StaticMap
 						mapStyle="mapbox://styles/zuppif/ck7dq0q6x1hwo1inu7n734ou1"

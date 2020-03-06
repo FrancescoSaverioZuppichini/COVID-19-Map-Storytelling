@@ -32,7 +32,6 @@ export default function Chapter({
   // if slide the want to also apply the theme to color the overall background
   classList += slide ? ` slide` : ""
   classList += ` ${alignments[alignment]}`
-  console.log('text')
   return (
     <div id={id} className={classList}>
       <div className={theme}>
