@@ -90,23 +90,33 @@ export default class App extends Component {
 		viewState: initialViewState,
 		isInFullMap: true,
 		date: moment('01-23-2020', 'MM-DD-YYYY'),
-		data: {},
+		data: [],
 		geoCountries: []
 	}
 
 	componentDidMount() {
-		// const geoDatas = [
-		// 	axios.get('/countries-small.geojson'),
-		// 	axios.get('/china-provinces.geojson')
-		// ])
-		axios.get('/china-provinces.geojson').then(({ data }) => this.setState({ geoCountries: data }))
+		const geoDatas = [
+			axios.get('/countries-small.geojson'),
+			axios.get('/china-provinces.geojson')
+		]
+
+		Promise.all(geoDatas)
+			.then(data => {
+				const features = [...data[0].data.features, ...data[1].data.features]
+				const contriesAndChina = {
+					type: data[0].data.type,
+					features
+				}
+				return contriesAndChina
+			})
+			.then( geoCountries => this.setState({ geoCountries }))
+		// axios.get('/china-provinces.geojson').then(({ data }) => this.setState({ geoCountries: data }))
 		this.getDataFromDate(this.state.date)
 	}
 
 	extractDateFromChapter = ({ text }) => {
 		const firstLine = text.split('\n')[0]
 		const date = moment(firstLine, "MM-DD-YYYY");
-
 		return date
 	}
 
@@ -114,7 +124,6 @@ export default class App extends Component {
 		// if we are scrolling up we want to keep the previos animation duration
 		const weAreGoingBack = this.state.currentChapter.id > chapter.id
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
-
 		this.setState({
 			currentChapter: chapter,
 			date: chapter.date,
@@ -128,6 +137,72 @@ export default class App extends Component {
 				}
 			}
 		})
+	}
+
+	getGeoLayer(countries) {
+		let data = []
+		if (countries && this.state.geoCountries.features) {
+			const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
+			data = { type: this.state.geoCountries.type, features }
+		}
+		let totalInfected = 0
+		if (this.state.data.length > 0) {
+			for (var i = 0; i < this.state.data.length; i++) {
+				totalInfected = totalInfected + Number(this.state.data[i].Confirmed)
+			}
+		}
+		const layer = new GeoJsonLayer({
+			id: 'geojson-layer',
+			data: this.state.geoCountries,
+			pickable: true,
+			filled: true,
+			extruded: true,
+			lineWidthScale: 20,
+			lineWidthMinPixels: 2,
+			getFillColor: (d) => {
+				const covisData = this.state.data.find((el) => el['Province/State'] == d.properties.NAME)
+				if (covisData) {
+					const ratio = Number(covisData.Confirmed) / totalInfected
+					return [255 * ratio, 0, 0, 100]
+				}
+			},
+			getRadius: 100,
+			getLineWidth: 1,
+			getElevation: 30,
+			onHover: ({ object, x, y }) => {
+				if (object) {
+					console.log(object)
+					const covisData = this.state.data.find((el) => el['Province/State'] == object.properties.NAME)
+					if (covisData) {
+						console.log(Number(covisData.Confirmed))
+					}
+				}
+				//   const tooltip = object.properties.name || object.properties.station;
+				/* Update tooltip
+				   http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
+				*/
+			}
+		})
+
+		return layer
+	}
+
+	getDataFromDate(date) {
+		/***
+		 * This function gets the data from a github repo using the current date and returns a list of objects.
+		 *  Be awere, the format must be MM-DD-YYYY. We are using moment.js to properly parse the date.
+		 */
+		const dateFormat = date.format('MM-DD-YYYY')
+		const DATA_URL = '/api/v1/data/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'
+		const url = `${DATA_URL}${dateFormat}.csv`
+		const csvParser = csv()
+
+		axios.get(url)
+			.then(({ data }) => data)
+			.then(data => csvParser.fromString(data))
+			.then(data => this.setState({ data }))
+			.then(_ => console.log(this.state.data))
+
 	}
 
 	mapOnLoad = () => {
@@ -160,56 +235,6 @@ export default class App extends Component {
 			})
 	}
 
-	getGeoLayer(countries) {
-		let data = []
-		if (countries && this.state.geoCountries.features) {
-			const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
-			data = { type: this.state.geoCountries.type, features }
-		}
-
-		const layer = new GeoJsonLayer({
-			id: 'geojson-layer',
-			data: this.state.geoCountries,
-			pickable: true,
-			stroked: false,
-			filled: true,
-			extruded: true,
-			lineWidthScale: 20,
-			lineWidthMinPixels: 2,
-			getFillColor: (d) => [155, 0, 0, 50],
-			// getLineColor: d => [255, 0, 0, 255],
-			getRadius: 100,
-			getLineWidth: 1,
-			getElevation: 30,
-			onHover: ({ object, x, y }) => {
-				console.log(object)
-				//   const tooltip = object.properties.name || object.properties.station;
-				/* Update tooltip
-				   http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-				*/
-			}
-		})
-
-		return layer
-	}
-
-	getDataFromDate(date) {
-		/***
-		 * This function gets the data from a github repo using the current date and returns a list of objects.
-		 *  Be awere, the format must be MM-DD-YYYY. We are using moment.js to properly parse the date.
-		 */
-		const dateFormat = date.format('MM-DD-YYYY')
-		const DATA_URL = '/api/v1/data/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'
-		const url = `${DATA_URL}${dateFormat}.csv`
-		const csvParser = csv()
-
-		axios.get(url)
-		.then(({ data }) => data)
-		.then(data => csvParser.fromString(data))
-		.then(data => this.setState({ data }))
-		.then(_ => console.log(this.state.data))
-
-	}
 
 	onHazardButton = () => {
 		/***
@@ -232,6 +257,7 @@ export default class App extends Component {
 				isInFullMap: true,
 			})
 		} else {
+			// TODO we should also ask and get the text/process the data!!
 			// go back to the current chapter location
 			this.setChapterLocation(this.state.currentChapter)
 		}
