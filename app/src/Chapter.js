@@ -25,7 +25,6 @@ export default function Chapter({
   currentChapterID,
   slide = false,
   alignment = "left",
-  date = ""
 }) {
   // old school class conditioning
   let classList = id === currentChapterID ? "step active" : "step"
@@ -35,7 +34,6 @@ export default function Chapter({
   return (
     <div id={id} className={classList}>
       <div className={theme}>
-        <p>{date}</p>
         {text ? <ReactMarkdown source={text} /> : <DummyText />}
       </div>
     </div>

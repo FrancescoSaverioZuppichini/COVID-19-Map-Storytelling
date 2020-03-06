@@ -9,6 +9,9 @@ import { easeCubic } from 'd3-ease'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import axios from 'axios'
 import { Marker } from 'react-map-gl'
+import moment from 'moment'
+import csv from "csvtojson"
+
 // import { ThemeProvider } from 'emotion-theming'
 // import theme from '@rebass/preset'
 // import { Button } from 'rebass'
@@ -85,17 +88,20 @@ export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
 		viewState: initialViewState,
-		isInFullMap: false,
+		isInFullMap: true,
+		date: moment('01-23-2020', 'MM-DD-YYYY'),
+		data: {},
 		geoCountries: []
 	}
 
 	componentDidMount() {
 		axios.get('/countries-small.geojson').then(({ data }) => this.setState({ geoCountries: data }))
+		this.getDataFromDate(this.state.date)
 	}
 
-	extractDataFromChapter = ({ text }) => {
+	extractDateFromChapter = ({ text }) => {
 		const firstLine = text.split('\n')[0]
-		const date = new Date(firstLine)
+		const date = moment(firstLine, "MM-DD-YYYY");
 
 		return date
 	}
@@ -107,6 +113,7 @@ export default class App extends Component {
 
 		this.setState({
 			currentChapter: chapter,
+			date: chapter.date,
 			isInFullMap: false,
 			viewState: {
 				...chapter.location,
@@ -120,9 +127,6 @@ export default class App extends Component {
 	}
 
 	mapOnLoad = () => {
-		// map our transitions function to a string for easy access
-
-
 		const scroller = scrollama()
 
 		scroller
@@ -138,7 +142,7 @@ export default class App extends Component {
 				const { data } = await axios.get(`/stories/${chapter.id}.md`)
 				// update chapter obj
 				chapter.text = data
-				chapter.data = this.extractDataFromChapter(chapter)
+				chapter.date = this.extractDateFromChapter(chapter)
 				// if we have a new location we want to move to it
 				if (chapter.location) {
 					this.setChapterLocation(chapter)
@@ -150,15 +154,6 @@ export default class App extends Component {
 			})
 			.onStepExit(() => {
 			})
-	}
-
-	// TODO need to proxy!
-	async getDataFromDate(date){
-		const DATA_URL = 'https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_daily_reports/'
-		const url = `${DATA_URL}${date}.csv`
-
-		const {data} = await axios.get(url)
-		console.log(data)
 	}
 
 	getGeoLayer(countries) {
@@ -194,6 +189,24 @@ export default class App extends Component {
 		return layer
 	}
 
+	getDataFromDate(date) {
+		/***
+		 * This function gets the data from a github repo using the current date and returns a list of objects.
+		 *  Be awere, the format must be MM-DD-YYYY. We are using moment.js to properly parse the date.
+		 */
+		const dateFormat = date.format('MM-DD-YYYY')
+		const DATA_URL = '/api/v1/data/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'
+		const url = `${DATA_URL}${dateFormat}.csv`
+		const csvParser = csv()
+
+		axios.get(url)
+		.then(({ data }) => data)
+		.then(data => csvParser.fromString(data))
+		.then(data => this.setState({ data }))
+		.then(_ => console.log(this.state.data))
+
+	}
+
 	onHazardButton = () => {
 		/***
 		 * Hazard button switch between full map view and the chapters view
@@ -209,6 +222,7 @@ export default class App extends Component {
 					transitionInterpolator: new FlyToInterpolator()
 				}
 			}
+			this.getDataFromDate(this.state.date)
 			this.setState({
 				viewState,
 				isInFullMap: true,
@@ -261,7 +275,7 @@ export default class App extends Component {
 							)}
 					</StaticMap>
 				</DeckGL>
-
+				<div style={{ height: '50vh' }}></div>
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} />
 				<HazardButton theme={config.theme} onClick={this.onHazardButton} />
 				<Footer />
