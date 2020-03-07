@@ -10,7 +10,7 @@ import { GeoJsonLayer } from '@deck.gl/layers'
 import axios from 'axios'
 import { Marker } from 'react-map-gl'
 import moment from 'moment'
-import csv from "csvtojson"
+import csv from 'csvtojson'
 
 // import { ThemeProvider } from 'emotion-theming'
 // import theme from '@rebass/preset'
@@ -88,43 +88,41 @@ export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
 		viewState: initialViewState,
-		isInFullMap: false,
+		isFlyingFromFullMap: false,
+		isInFullMap: false, // used to know where we hare in the full map mode
 		date: moment(),
 		data: [],
 		geoCountries: []
 	}
 
 	componentDidMount() {
-		const geoDatas = [
-			axios.get('/countries-small.geojson'),
-			axios.get('/china-provinces.geojson')
-		]
+		const geoDatas = [ axios.get('/countries-small.geojson'), axios.get('/china-provinces.geojson') ]
 
 		Promise.all(geoDatas)
-			.then(data => {
+			.then((data) => {
 				const countries = data[0].data
 				let china = data[1].data
 				// china data as name as `NAME`, to be coherent with
 				// countries data we include the `.name` field
-				china.features = china.features.map(el => {
+				china.features = china.features.map((el) => {
 					el.properties.name = el.properties.NAME
 					return el
 				})
 
 				const contriesAndChina = {
 					type: countries.type,
-					features: [...countries.features, ...china.features]
+					features: [ ...countries.features, ...china.features ]
 				}
 				return contriesAndChina
 			})
-			.then(geoCountries => this.setState({ geoCountries }))
+			.then((geoCountries) => this.setState({ geoCountries }))
 		// axios.get('/china-provinces.geojson').then(({ data }) => this.setState({ geoCountries: data }))
 		this.getDataFromDate(this.state.date)
 	}
 
 	extractDateFromChapter = ({ text }) => {
 		const firstLine = text.split('\n')[0]
-		const date = moment(firstLine, "MM-DD-YYYY");
+		const date = moment(firstLine, 'DD-MM-YYYY')
 		return date
 	}
 
@@ -142,7 +140,7 @@ export default class App extends Component {
 
 		covisData['Country/Region'] = region
 
-		return [covisData, ...data]
+		return [ covisData, ...data ]
 	}
 
 	setChapterLocation = (chapter) => {
@@ -164,27 +162,47 @@ export default class App extends Component {
 		})
 	}
 
-	getGeoLayer(countries) {
+	getChapterGeoLayer(countries) {
+		let data = []
+		if (countries && this.state.geoCountries.features) {
+			const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
+			data = { type: this.state.geoCountries.type, features }
+		}
+
+		const layer = new GeoJsonLayer({
+			id: 'geojson-layer',
+			data: data,
+			pickable: true,
+			filled: true,
+			extruded: true,
+			lineWidthScale: 20,
+			lineWidthMinPixels: 2,
+			getFillColor: [ 155, 0, 0, 100 ],
+			getRadius: 100,
+			getLineWidth: 1,
+			getElevation: 30
+		})
+
+		return layer
+	}
+
+	getCovidGeoLayer() {
 		let data = this.state.geoCountries
 		let totalInfected = 0
+		// console.log(`Total infected = ${totalInfected}`)
 
 		if (this.state.data.length > 0) {
 			for (var i = 0; i < this.state.data.length; i++) {
 				totalInfected = totalInfected + Number(this.state.data[i].Confirmed)
 			}
 		}
-		console.log(this.state.isInFullMap)
-		console.log(`Total infected = ${totalInfected}`)
+		// console.log(`Total infected = ${totalInfected}`)
 
-		if (!this.state.isInFullMap) {
-			data = []
-			if (countries && this.state.geoCountries.features) {
-				const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
-				data = { type: this.state.geoCountries.type, features }
-			}
-		}
+		const findDataForGeoRegion = (d) =>
+			this.state.data.find(
+				(el) => el['Province/State'] == d.properties.name || el['Country/Region'] == d.properties.name
+			)
 
-		const findDataForGeoRegion = (d) => this.state.data.find((el) => el['Province/State'] == d.properties.name || el['Country/Region'] == d.properties.name)
 		const layer = new GeoJsonLayer({
 			id: 'geojson-layer',
 			data: data,
@@ -195,31 +213,21 @@ export default class App extends Component {
 			lineWidthMinPixels: 2,
 			getFillColor: (d) => {
 				// base color is transparent
-				let colour = [0, 0, 0, 0]
-				if (this.state.isInFullMap) {
-					const covisData = findDataForGeoRegion(d)
-					console.log(covisData)
-					if (covisData) {
-						if (covisData.Confirmed > 0) {
-							const ratio = Number(covisData.Confirmed) / totalInfected
-							colour = [255 * ratio, 0, 0, 100]
-						}
+				let colour = [ 0, 0, 0, 0 ]
+				const covisData = findDataForGeoRegion(d)
+				if (covisData) {
+					if (covisData.Confirmed > 0) {
+						const ratio = Number(covisData.Confirmed) / totalInfected
+						colour = [ 255 * ratio, 0, 0, 100 ]
 					}
 				}
-
-				else {
-					return [155, 0, 0, 100]
-				}
-
 				return colour
-
 			},
 			getRadius: 100,
 			getLineWidth: 1,
 			getElevation: 30,
 			onHover: ({ object, x, y }) => {
 				if (object) {
-					// console.log(object)
 					const covisData = findDataForGeoRegion(object)
 					if (covisData) {
 						console.log(Number(covisData.Confirmed))
@@ -235,7 +243,6 @@ export default class App extends Component {
 		return layer
 	}
 
-
 	getDataFromDate(date) {
 		/***
 		 * This function gets the data from a github repo using the current date and returns a list of objects.
@@ -246,12 +253,12 @@ export default class App extends Component {
 		const url = `${DATA_URL}${dateFormat}.csv`
 		const csvParser = csv()
 
-		axios.get(url)
+		axios
+			.get(url)
 			.then(({ data }) => data)
-			.then(data => csvParser.fromString(data))
-			.then(data => this.aggregateRegion(data, 'US'))
-			.then(data => this.setState({ data }))
-
+			.then((data) => csvParser.fromString(data))
+			.then((data) => this.aggregateRegion(data, 'US'))
+			.then((data) => this.setState({ data }))
 	}
 
 	mapOnLoad = () => {
@@ -276,14 +283,13 @@ export default class App extends Component {
 					this.setChapterLocation(chapter)
 				} else {
 					this.setState({
-						currentChapter: chapter
+						currentChapter: chapter,
+						isInFullMap: false
 					})
 				}
 			})
-			.onStepExit(() => {
-			})
+			.onStepExit(() => {})
 	}
-
 
 	onHazardButton = () => {
 		/***
@@ -301,18 +307,25 @@ export default class App extends Component {
 				}
 			}
 			this.getDataFromDate(this.state.date)
-			this.setState({
-				viewState,
-				isInFullMap: true,
-			})
+			this.setState({ viewState, isFlyingFromFullMap: false })
 		} else {
 			// TODO we should also ask and get the text/process the data!!
 			// go back to the current chapter location
+			this.setState({ isFlyingFromFullMap: true })
 			this.setChapterLocation(this.state.currentChapter)
 		}
 	}
 
 	onViewStateChange = ({ viewState }) => {
+		const { latitude, longitude } = WORLD_COORDINATE
+		// do not check when we go back to chapter view
+		if (!this.state.isInFullMap && !this.state.isFlyingFromFullMap) {
+			// check if we have stopped flying to the final map position
+			const isInFullMap =
+				Math.abs(viewState.latitude - latitude) < 0.0001 && Math.abs(viewState.longitude - longitude) < 0.0001
+			this.setState({ isInFullMap })
+		}
+
 		this.setState({ viewState })
 	}
 
@@ -330,6 +343,9 @@ export default class App extends Component {
 	}
 
 	render() {
+		const geoLayer = this.state.isInFullMap
+			? this.getCovidGeoLayer()
+			: this.getChapterGeoLayer(this.state.currentChapter.countries)
 		return (
 			<div>
 				<Title {...config} />
@@ -337,7 +353,7 @@ export default class App extends Component {
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
-					layers={[this.getGeoLayer(this.state.currentChapter.countries)]}
+					layers={[ geoLayer ]}
 					style={this.mapStyle()}
 				>
 					<StaticMap
@@ -350,17 +366,15 @@ export default class App extends Component {
 								<img src="https://i.imgur.com/MK4NUzI.png" />
 							</Marker>
 						) : (
-								''
-							)}
+							''
+						)}
 					</StaticMap>
 				</DeckGL>
-				<div style={{ height: '50vh' }}></div>
+				<div style={{ height: '50vh' }} />
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} />
 				<HazardButton theme={config.theme} onClick={this.onHazardButton} />
 				<Footer />
 			</div>
-			// )}
-			// </ThemeProvider>
 		)
 	}
 }
