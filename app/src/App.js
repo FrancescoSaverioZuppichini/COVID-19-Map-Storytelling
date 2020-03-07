@@ -88,8 +88,8 @@ export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
 		viewState: initialViewState,
-		isInFullMap: true,
-		date: moment('01-23-2020', 'MM-DD-YYYY'),
+		isInFullMap: false,
+		date: moment(),
 		data: [],
 		geoCountries: []
 	}
@@ -102,14 +102,22 @@ export default class App extends Component {
 
 		Promise.all(geoDatas)
 			.then(data => {
-				const features = [...data[0].data.features, ...data[1].data.features]
+				const countries = data[0].data
+				let china = data[1].data
+				// china data as name as `NAME`, to be coherent with
+				// countries data we include the `.name` field
+				china.features = china.features.map(el => {
+					el.properties.name = el.properties.NAME
+					return el
+				})
+
 				const contriesAndChina = {
-					type: data[0].data.type,
-					features
+					type: countries.type,
+					features: [...countries.features, ...china.features]
 				}
 				return contriesAndChina
 			})
-			.then( geoCountries => this.setState({ geoCountries }))
+			.then(geoCountries => this.setState({ geoCountries }))
 		// axios.get('/china-provinces.geojson').then(({ data }) => this.setState({ geoCountries: data }))
 		this.getDataFromDate(this.state.date)
 	}
@@ -118,6 +126,23 @@ export default class App extends Component {
 		const firstLine = text.split('\n')[0]
 		const date = moment(firstLine, "MM-DD-YYYY");
 		return date
+	}
+
+	aggregateRegion = (data, region) => {
+		// TODO should go in utils
+		let covisData = { Confirmed: 0, Deaths: 0, Recovered: 0 }
+
+		for (let el of data) {
+			if (el['Country/Region'] === region) {
+				covisData.Confirmed += Number(el.Confirmed)
+				covisData.Deaths += Number(el.Deaths)
+				covisData.Recovered += Number(el.Recovered)
+			}
+		}
+
+		covisData['Country/Region'] = region
+
+		return [covisData, ...data]
 	}
 
 	setChapterLocation = (chapter) => {
@@ -140,39 +165,62 @@ export default class App extends Component {
 	}
 
 	getGeoLayer(countries) {
-		let data = []
-		if (countries && this.state.geoCountries.features) {
-			const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
-			data = { type: this.state.geoCountries.type, features }
-		}
+		let data = this.state.geoCountries
 		let totalInfected = 0
+
 		if (this.state.data.length > 0) {
 			for (var i = 0; i < this.state.data.length; i++) {
 				totalInfected = totalInfected + Number(this.state.data[i].Confirmed)
 			}
 		}
+		console.log(this.state.isInFullMap)
+		console.log(`Total infected = ${totalInfected}`)
+
+		if (!this.state.isInFullMap) {
+			data = []
+			if (countries && this.state.geoCountries.features) {
+				const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
+				data = { type: this.state.geoCountries.type, features }
+			}
+		}
+
+		const findDataForGeoRegion = (d) => this.state.data.find((el) => el['Province/State'] == d.properties.name || el['Country/Region'] == d.properties.name)
 		const layer = new GeoJsonLayer({
 			id: 'geojson-layer',
-			data: this.state.geoCountries,
+			data: data,
 			pickable: true,
 			filled: true,
 			extruded: true,
 			lineWidthScale: 20,
 			lineWidthMinPixels: 2,
 			getFillColor: (d) => {
-				const covisData = this.state.data.find((el) => el['Province/State'] == d.properties.NAME)
-				if (covisData) {
-					const ratio = Number(covisData.Confirmed) / totalInfected
-					return [255 * ratio, 0, 0, 100]
+				// base color is transparent
+				let colour = [0, 0, 0, 0]
+				if (this.state.isInFullMap) {
+					const covisData = findDataForGeoRegion(d)
+					console.log(covisData)
+					if (covisData) {
+						if (covisData.Confirmed > 0) {
+							const ratio = Number(covisData.Confirmed) / totalInfected
+							colour = [255 * ratio, 0, 0, 100]
+						}
+					}
 				}
+
+				else {
+					return [155, 0, 0, 100]
+				}
+
+				return colour
+
 			},
 			getRadius: 100,
 			getLineWidth: 1,
 			getElevation: 30,
 			onHover: ({ object, x, y }) => {
 				if (object) {
-					console.log(object)
-					const covisData = this.state.data.find((el) => el['Province/State'] == object.properties.NAME)
+					// console.log(object)
+					const covisData = findDataForGeoRegion(object)
 					if (covisData) {
 						console.log(Number(covisData.Confirmed))
 					}
@@ -187,6 +235,7 @@ export default class App extends Component {
 		return layer
 	}
 
+
 	getDataFromDate(date) {
 		/***
 		 * This function gets the data from a github repo using the current date and returns a list of objects.
@@ -200,8 +249,8 @@ export default class App extends Component {
 		axios.get(url)
 			.then(({ data }) => data)
 			.then(data => csvParser.fromString(data))
+			.then(data => this.aggregateRegion(data, 'US'))
 			.then(data => this.setState({ data }))
-			.then(_ => console.log(this.state.data))
 
 	}
 
@@ -296,7 +345,7 @@ export default class App extends Component {
 						mapboxApiAccessToken={config.accessToken}
 						onLoad={this.mapOnLoad}
 					>
-						{this.state.currentChapter.marker ? (
+						{this.state.currentChapter.marker && !this.state.isInFullMap ? (
 							<Marker {...this.state.currentChapter.marker}>
 								<img src="https://i.imgur.com/MK4NUzI.png" />
 							</Marker>
