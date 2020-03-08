@@ -46,15 +46,24 @@ a:visited {
 
 }
 
+#hazardButton:focus {
+  outline: none;
+}
+
+#hazardButton > img {
+  width:90%;
+}
+
 #features {
   z-index: 99;
 }
 
 #covidDataInfo {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
   top: 24px;
   right: 24px;
+  min-width: 300px;
 }
 
 .text-row > * {

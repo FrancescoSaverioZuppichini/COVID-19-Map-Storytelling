@@ -47,10 +47,11 @@ function Chapters({ chapters, theme, currentChapterID }) {
 	)
 }
 
-function HazardButton({ theme, onClick }) {
+function HazardButton({ theme, onClick, isInFullMap }) {
+	const icon = isInFullMap ?  '/text_fields-24px.svg' : '/biohazard.png' 
 	return (
 		<button id="hazardButton" onClick={onClick} className="">
-			<img src="/biohazard.png" />
+			<img src={icon} />
 		</button>
 	)
 }
@@ -133,9 +134,11 @@ export default class App extends Component {
 		// if we are scrolling up we want to keep the previos animation duration
 		const weAreGoingBack = this.state.currentChapter.id > chapter.id
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
+		// set new date only if we have one
+		const date = chapter.date === undefined ? this.state.date : chapter.date
 		this.setState({
 			currentChapter: chapter,
-			date: chapter.date,
+			date: date,
 			isInFullMap: false,
 			viewState: {
 				...chapter.location,
@@ -222,6 +225,7 @@ export default class App extends Component {
 							Recovered: Number(covisData.Recovered),
 							name: getName(covisData)
 						}
+						// console.log(countryCovidData)
 						this.setState({ countryCovidData })
 					}
 				}
@@ -251,6 +255,7 @@ export default class App extends Component {
 			.then((data) => csvParser.fromString(data))
 			.then((data) => aggregateRegion(data, 'US'))
 			.then((data) => {
+				console.log('new data', data)
 				const totalCovidData = aggregateAll(data)
 				this.setState({ data, totalCovidData })
 			})
@@ -266,6 +271,7 @@ export default class App extends Component {
 				progress: true
 			})
 			.onStepEnter(async (response) => {
+				// TODO this should go inside a method like loadChapter
 				// we want to find out chapter and then move to it
 				let chapter = config.chapters.find((chap) => chap.id === response.element.id)
 				// TODO would be nice to preload the text or show some loading content on the card
@@ -361,8 +367,8 @@ export default class App extends Component {
 				</DeckGL>
 				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 					country={this.state.countryCovidData} date={this.state.date} /> : ''}
-				{/* <Chapters {...config} currentChapterID={this.state.currentChapter.id} /> */}
-				<HazardButton theme={config.theme} onClick={this.onHazardButton} />
+				<Chapters {...config} currentChapterID={this.state.currentChapter.id} />
+				<HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />
 				<Footer />
 			</div>
 		)

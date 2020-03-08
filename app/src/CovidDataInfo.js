@@ -2,7 +2,6 @@ import React from "react"
 
 
 export default function CovidDataInfo({ total = {}, country = {}, date }) {
-
   return (
     <div id='covidDataInfo' className="card light">
       <div>
