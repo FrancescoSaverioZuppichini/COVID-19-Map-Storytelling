@@ -1,3 +1,7 @@
+import DeckGL, { TRANSITION_EVENTS } from 'deck.gl'
+import { easeCubic } from 'd3-ease'
+
+
 export function aggregateAll(data) {
     let aggregated = {
         Confirmed: 0, Deaths: 0, Recovered: 0
@@ -14,7 +18,6 @@ export function aggregateAll(data) {
 }
 
 export function aggregateRegion(data, region) {
-    // TODO should go in utils
     let covisData = { Confirmed: 0, Deaths: 0, Recovered: 0 }
 
     for (let el of data) {
@@ -28,4 +31,14 @@ export function aggregateRegion(data, region) {
     covisData['Country/Region'] = region
 
     return [covisData, ...data]
+}
+
+export const transitions = {
+	break: () => TRANSITION_EVENTS.BREAK,
+	ease: easeCubic
+}
+
+export const WORLD_COORDINATE = {
+	latitude: 15.38585,
+	longitude: 26.68114
 }

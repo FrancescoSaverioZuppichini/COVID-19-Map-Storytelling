@@ -5,7 +5,7 @@ export default function CovidDataInfo({ total = {}, country = {}, date }) {
   return (
     <div id='covidDataInfo' className="card light">
       <div>
-        <p>{date.format('DD-MM-YYYY')}</p>
+        <p>Cases on {date.format('DD-MM-YYYY')}</p>
         <p>{country.name}</p>
         {/* <h1>{total.Confirmed}</h1> */}
         <div>

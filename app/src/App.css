@@ -37,8 +37,8 @@ a:visited {
 #hazardButton{
   z-index: 999;
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  right: 32px;
+  bottom: 32px;
   border-radius: 50px;
   width: 68px;
   height: 68px;

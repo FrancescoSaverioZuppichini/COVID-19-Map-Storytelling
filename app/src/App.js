@@ -1,77 +1,20 @@
 import React, { Component } from 'react'
 import './App.css'
 import config from './config.js'
-import DeckGL, { MapController, FlyToInterpolator, TRANSITION_EVENTS } from 'deck.gl'
+import DeckGL, { MapController, FlyToInterpolator } from 'deck.gl'
 import { StaticMap } from 'react-map-gl'
 import scrollama from 'scrollama'
-import Chapter from './Chapter'
-import { easeCubic } from 'd3-ease'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import axios from 'axios'
 import { Marker } from 'react-map-gl'
 import moment from 'moment'
 import csv from 'csvtojson'
-import { aggregateAll, aggregateRegion } from './utils.js'
+import { aggregateAll, aggregateRegion, transitions, WORLD_COORDINATE } from './utils.js'
 import CovidDataInfo from './CovidDataInfo'
-// import { ThemeProvider } from 'emotion-theming'
-// import theme from '@rebass/preset'
-// import { Button } from 'rebass'
-
-function Title({ title, subtitle, byline, theme }) {
-	return (
-		<div>
-			{config.title && (
-				<div id="header" className={theme}>
-					<h1>{config.title}</h1>
-					{config.subtitle && <h2>{config.subtitle}</h2>}
-					{config.byline && <p>{config.byline}</p>}
-				</div>
-			)}
-		</div>
-	)
-}
-
-function Intro() {
-	return <div />
-}
-
-function Chapters({ chapters, theme, currentChapterID }) {
-	return (
-		<div id="story">
-			<div id="features">
-				{chapters.map((chapter) => (
-					<Chapter key={chapter.id} theme={theme} {...chapter} currentChapterID={currentChapterID} />
-				))}
-			</div>
-		</div>
-	)
-}
-
-function HazardButton({ theme, onClick, isInFullMap }) {
-	const icon = isInFullMap ?  '/text_fields-24px.svg' : '/biohazard.png' 
-	return (
-		<button id="hazardButton" onClick={onClick} className="">
-			<img src={icon} />
-		</button>
-	)
-}
-
-function Footer({ footer, theme }) {
-	return (
-		<div>
-			{footer && (
-				<div id="footer" className={theme}>
-					<p>{footer}</p>
-				</div>
-			)}
-		</div>
-	)
-}
-
-const transitions = {
-	break: () => TRANSITION_EVENTS.BREAK,
-	ease: easeCubic
-}
+import Title from './Title'
+import Chapters from './Chapters'
+import HazardButton from './HazardButton'
+import Footer from './Footer.js'
 
 const initialViewState = {
 	longitude: 15.38585,
@@ -81,15 +24,12 @@ const initialViewState = {
 	bearing: 0
 }
 
-const WORLD_COORDINATE = {
-	latitude: 15.38585,
-	longitude: 26.68114
-}
 
 export default class App extends Component {
 	state = {
 		currentChapter: config.chapters[0],
 		viewState: initialViewState,
+		isFlyingToFullMap: false,
 		isFlyingFromFullMap: false,
 		isInFullMap: true, // used to know where we hare in the full map mode
 		date: moment("01-02-2020", 'DD-MM-YYYY'),
@@ -218,21 +158,22 @@ export default class App extends Component {
 			onHover: ({ object, x, y }) => {
 				if (object) {
 					const covisData = findDataForGeoRegion(object)
+					// default is 0 cases for a country not in the covis data
+					let countryCovidData = {
+						Confirmed: 0, Deaths: 0, Recovered: 0, name : object.properties.name
+					}
 					if (covisData) {
-						const countryCovidData = {
+						countryCovidData = {
 							Confirmed: Number(covisData.Confirmed),
 							Deaths: Number(covisData.Deaths),
 							Recovered: Number(covisData.Recovered),
 							name: getName(covisData)
 						}
-						// console.log(countryCovidData)
-						this.setState({ countryCovidData })
 					}
+
+					this.setState({ countryCovidData })
+
 				}
-				//   const tooltip = object.properties.name || object.properties.station;
-				/* Update tooltip
-				   http://deck.gl/#/documentation/developer-guide/adding-interactivity?section=example-display-a-tooltip-for-hovered-object
-				*/
 			}
 		})
 
@@ -307,14 +248,21 @@ export default class App extends Component {
 					transitionInterpolator: new FlyToInterpolator()
 				}
 			}
-			// wait to get the data and set set the state
+			// in order
+			// 1) get the data using the date
+			// 2) set the state to move the map 
+			// 3) wait 2s (the duration time of the fly animation) to display the data
 			this.getDataFromDate(this.state.date)
-				.then(() => this.setState({ viewState, isFlyingFromFullMap: false, isInFullMap: true, }))
+				.then(() => this.setState({ viewState, 
+					isFlyingToFullMap: true,
+					isFlyingFromFullMap: false, 
+					isInFullMap: true, }))
+				.then(() => setTimeout(() => this.setState({isFlyingToFullMap: false}), 2000))
 
 		} else {
 			// TODO we should also ask and get the text/process the data!!
 			// go back to the current chapter location
-			this.setState({ isFlyingFromFullMap: true, isInFullMap: false })
+			this.setState({ isFlyingFromFullMap: true, isFlyingToFullMap:false, isInFullMap: false })
 			this.setChapterLocation(this.state.currentChapter)
 		}
 	}
@@ -337,7 +285,7 @@ export default class App extends Component {
 	}
 
 	render() {
-		const geoLayer = this.state.isInFullMap
+		const geoLayer = this.state.isInFullMap && !this.state.isFlyingToFullMap
 			? this.getCovidGeoLayer()
 			: this.getChapterGeoLayer(this.state.currentChapter)
 

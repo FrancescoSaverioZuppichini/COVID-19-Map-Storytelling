@@ -4,6 +4,14 @@ var config = {
 	showMarkers: true,
 	theme: 'light',
 	alignment: 'left',
+	header: `# COVID-19
+## A story told by maps
+*By a Francesco Saverio Zuppichini and Riccardo Pisoni*
+
+We decided to tell the story of the new pandemic knows as *corona virus* (COVID-19) using maps. At any time you can press the button on the down right with the hazard icon to see all the cases on the story's date in the world.
+
+**Behind each number there is a person**, remember it.
+	`,
 	title: 'COVID-19',
 	subtitle: 'A story told by maps',
 	byline: 'By a Francesco Saverio Zuppichini and Riccardo Pisoni',
