@@ -32,7 +32,7 @@ export default function Chapter({
   classList += slide ? ` slide` : ""
   classList += ` ${alignments[alignment]}`
   return (
-    <div id={id} className={classList}>
+    <div id={id} className={classList + ' card'}>
       <div className={theme}>
         {text ? <ReactMarkdown source={text} /> : <DummyText />}
       </div>

@@ -46,15 +46,36 @@ a:visited {
 
 }
 
-
-
 #features {
   z-index: 99;
 }
+
+#covidDataInfo {
+  position: absolute;
+  z-index: 9999;
+  top: 24px;
+  right: 24px;
+}
+
+.text-row > * {
+  margin: 4px;
+}
+
+.flex { 
+  display: flex;
+
+}
+
+.baseline { 
+  align-items: baseline;
+}
+
+
 .centered {
   width: 50vw;
   margin: 0 auto;
 }
+
 .lefty {
   width: 33vw;
   padding-left: 5vw;
@@ -81,7 +102,7 @@ a:visited {
   opacity: 0.95;
 }
 
-.step > div {
+.card > div {
   padding: 25px 50px;
   line-height: 25px;
   font-size: 15px;
