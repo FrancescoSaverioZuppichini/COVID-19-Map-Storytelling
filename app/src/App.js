@@ -40,14 +40,15 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
+		// get all data as soon as the component is ready
 		const geoDatas = [axios.get('/countries-small.geojson'), axios.get('/china-provinces.geojson')]
 
 		Promise.all(geoDatas)
 			.then((data) => {
 				const countries = data[0].data
 				let china = data[1].data
-				// china data as name as `NAME`, to be coherent with
-				// countries data we include the `.name` field
+				// china data has the name as `NAME` field, to be coherent with
+				// countries data we included the `.name` field
 				china.features = china.features.map((el) => {
 					el.properties.name = el.properties.NAME
 					return el
@@ -60,21 +61,27 @@ export default class App extends Component {
 				return contriesAndChina
 			})
 			.then((geoCountries) => this.setState({ geoCountries }))
-		// axios.get('/china-provinces.geojson').then(({ data }) => this.setState({ geoCountries: data }))
-		this.getDataFromDate(this.state.date)
+
 	}
 
 	extractDateFromChapter = ({ text }) => {
+		/***
+		 * In the markdown files with the text we have the data in the first line has DD-MM-YYYY. 
+		 * This function extract the date from the text and store it in the app state
+		 */
 		const firstLine = text.split('\n')[0]
 		const date = moment(firstLine, 'DD-MM-YYYY')
 		return date
 	}
 
 	setChapterLocation = (chapter) => {
+		/***
+		 * This function sets the given chapter as current chapter. This implies updating the location and the date.
+		 */
 		// if we are scrolling up we want to keep the previos animation duration
 		const weAreGoingBack = this.state.currentChapter.id > chapter.id
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
-		// set new date only if we have one
+		// if not new date, use the last one
 		const date = chapter.date === undefined ? this.state.date : chapter.date
 		this.setState({
 			currentChapter: chapter,
@@ -83,7 +90,7 @@ export default class App extends Component {
 			viewState: {
 				...chapter.location,
 				...{
-					transitionEasing: transitions[chapter.transition || 'ease'], // TODO we should check if we are going backwards or towards
+					transitionEasing: transitions[chapter.transition || 'ease'],
 					transitionDuration: duration || 1000,
 					transitionInterpolator: new FlyToInterpolator()
 				}
@@ -92,6 +99,11 @@ export default class App extends Component {
 	}
 
 	getChapterGeoLayer({ countries }) {
+		/***
+		 * This function return the geo layer for the chapter. If chapter.countries is not empty, 
+		 * these countries will be highlighted.
+		 */
+
 		let data = []
 		if (countries && this.state.geoCountries.features) {
 			const features = this.state.geoCountries.features.filter((d) => countries.includes(d.properties.name))
@@ -116,25 +128,24 @@ export default class App extends Component {
 	}
 
 	getCovidGeoLayer() {
-		let data = this.state.geoCountries
-
-		// console.log(`Total infected = ${totalInfected}`)
-
+		/**
+		 * This function return the go layer for the covis data displayed when we are in full map view.
+		 */
 		const findDataForGeoRegion = (d) =>
 			this.state.data.find(
 				(el) => el['Province/State'] == d.properties.name || el['Country/Region'] == d.properties.name
 			)
 
-		const getName = (d ) => {
+		const getName = (d) => {
 			const province = d['Province/State']
 			const country = d['Country/Region']
-			
-			return `${province != '' ? province + ' ': ''}${country}`
+
+			return `${province != '' ? province + ' ' : ''}${country}`
 
 		}
 		const layer = new GeoJsonLayer({
 			id: 'geojson-layer',
-			data: data,
+			data: this.state.geoCountries,
 			pickable: true,
 			filled: true,
 			extruded: true,
@@ -146,6 +157,7 @@ export default class App extends Component {
 				const covisData = findDataForGeoRegion(d)
 				if (covisData) {
 					if (covisData.Confirmed > 0) {
+						// TODO logiritmic scale?
 						const ratio = Number(covisData.Confirmed) / (this.state.totalCovidData.Confirmed / 100)
 						colour = [255 * ratio, 0, 0, 100]
 					}
@@ -157,10 +169,11 @@ export default class App extends Component {
 			getElevation: 30,
 			onHover: ({ object, x, y }) => {
 				if (object) {
+					// store the current country stats
 					const covisData = findDataForGeoRegion(object)
 					// default is 0 cases for a country not in the covis data
 					let countryCovidData = {
-						Confirmed: 0, Deaths: 0, Recovered: 0, name : object.properties.name
+						Confirmed: 0, Deaths: 0, Recovered: 0, name: object.properties.name
 					}
 					if (covisData) {
 						countryCovidData = {
@@ -203,6 +216,10 @@ export default class App extends Component {
 	}
 
 	mapOnLoad = () => {
+		/**
+		 * This function is called when the map is loaded. Here we setup `scrollama` used to 
+		 * update the chapters when we scroll down/up.
+		 */
 		const scroller = scrollama()
 
 		scroller
@@ -253,16 +270,18 @@ export default class App extends Component {
 			// 2) set the state to move the map 
 			// 3) wait 2s (the duration time of the fly animation) to display the data
 			this.getDataFromDate(this.state.date)
-				.then(() => this.setState({ viewState, 
+				.then(() => this.setState({
+					viewState,
 					isFlyingToFullMap: true,
-					isFlyingFromFullMap: false, 
-					isInFullMap: true, }))
-				.then(() => setTimeout(() => this.setState({isFlyingToFullMap: false}), 2000))
+					isFlyingFromFullMap: false,
+					isInFullMap: true,
+				}))
+				.then(() => setTimeout(() => this.setState({ isFlyingToFullMap: false }), 2000))
 
 		} else {
 			// TODO we should also ask and get the text/process the data!!
 			// go back to the current chapter location
-			this.setState({ isFlyingFromFullMap: true, isFlyingToFullMap:false, isInFullMap: false })
+			this.setState({ isFlyingFromFullMap: true, isFlyingToFullMap: false, isInFullMap: false })
 			this.setChapterLocation(this.state.currentChapter)
 		}
 	}
