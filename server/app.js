@@ -5,7 +5,7 @@ const logger = require("morgan")
 
 const PORT = process.env.PORT || "8080"
 
-const DATA_URl = "https://github.com/"
+const DATA_URl = "https://raw.githubusercontent.com/"
 
 app = express()
 
