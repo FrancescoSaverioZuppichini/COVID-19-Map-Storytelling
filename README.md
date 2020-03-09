@@ -22,7 +22,8 @@ The server will start on port `8080`. To change it:
 
 ```
 PORT=3000 npm start
-``
+```
+
 Now, the server will listen on port `3000`
 
 ## Contribution guideline
