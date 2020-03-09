@@ -31,7 +31,7 @@ export default class App extends Component {
 		viewState: initialViewState,
 		isFlyingToFullMap: false,
 		isFlyingFromFullMap: false,
-		isInFullMap: true, // used to know where we hare in the full map mode
+		isInFullMap: false, // used to know where we hare in the full map mode
 		date: moment("01-02-2020", 'DD-MM-YYYY'),
 		data: [],
 		totalCovidData: {},

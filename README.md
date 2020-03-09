@@ -3,6 +3,8 @@
 A story told by maps
 *By a Francesco Saverio Zuppichini and Riccardo Pisoni*
 
+![alt](app.gif)
+
 We decided to tell the story of the new pandemic known as *coronavirus* (COVID-19) using maps. At any time you can press the button on the downright with the hazard icon to see all the cases on the story's date in the world.
 
 **Behind each number there is a person**, remember it.
