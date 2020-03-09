@@ -233,7 +233,7 @@ export default class App extends Component {
 				// we want to find out chapter and then move to it
 				let chapter = config.chapters.find((chap) => chap.id === response.element.id)
 				// TODO would be nice to preload the text or show some loading content on the card
-				const { data } = await axios.get(`/stories/${chapter.id}.md`)
+				const { data } = await axios.get(`/chapters/${chapter.id}.md`)
 				// update chapter obj
 				chapter.text = data
 				chapter.date = this.extractDateFromChapter(chapter)
