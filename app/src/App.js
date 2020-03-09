@@ -70,7 +70,8 @@ export default class App extends Component {
 		 * This function extract the date from the text and store it in the app state
 		 */
 		const firstLine = text.split('\n')[0]
-		const date = moment(firstLine, 'DD-MM-YYYY')
+		let date = moment(firstLine, 'DD-MM-YYYY')
+		date = date.isValid() ? date : undefined
 		return date
 	}
 
@@ -83,6 +84,7 @@ export default class App extends Component {
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
 		// if not new date, use the last one
 		const date = chapter.date === undefined ? this.state.date : chapter.date
+		console.log(date)
 		this.setState({
 			currentChapter: chapter,
 			date: date,
@@ -147,10 +149,8 @@ export default class App extends Component {
 			id: 'geojson-layer',
 			data: this.state.geoCountries,
 			pickable: true,
+			stroked: true,
 			filled: true,
-			extruded: true,
-			lineWidthScale: 20,
-			lineWidthMinPixels: 2,
 			getFillColor: (d) => {
 				// base color is transparent
 				let colour = [0, 0, 0, 0]
@@ -158,15 +158,13 @@ export default class App extends Component {
 				if (covisData) {
 					if (covisData.Confirmed > 0) {
 						// TODO logiritmic scale?
-						const ratio = Number(covisData.Confirmed) / (this.state.totalCovidData.Confirmed / 100)
+						const ratio = Number(covisData.Confirmed) / (this.state.totalCovidData.Confirmed / 150)
 						colour = [255 * ratio, 0, 0, 100]
 					}
 				}
 				return colour
 			},
-			getRadius: 100,
-			getLineWidth: 1,
-			getElevation: 30,
+			getLineColor: [255, 255, 255, 255],
 			onHover: ({ object, x, y }) => {
 				if (object) {
 					// store the current country stats
@@ -240,6 +238,8 @@ export default class App extends Component {
 				// if we have a new location we want to move to it
 				if (chapter.location) {
 					this.setChapterLocation(chapter)
+					this.getDataFromDate(this.state.date)
+
 				} else {
 					this.setState({
 						currentChapter: chapter,
@@ -269,14 +269,13 @@ export default class App extends Component {
 			// 1) get the data using the date
 			// 2) set the state to move the map 
 			// 3) wait 2s (the duration time of the fly animation) to display the data
-			this.getDataFromDate(this.state.date)
-				.then(() => this.setState({
-					viewState,
-					isFlyingToFullMap: true,
-					isFlyingFromFullMap: false,
-					isInFullMap: true,
-				}))
-				.then(() => setTimeout(() => this.setState({ isFlyingToFullMap: false }), 2000))
+			this.setState({
+				viewState,
+				isFlyingToFullMap: true,
+				isFlyingFromFullMap: false,
+				isInFullMap: true,
+			})
+			setTimeout(() => this.setState({ isFlyingToFullMap: false }), 2000)
 
 		} else {
 			// TODO we should also ask and get the text/process the data!!
@@ -334,7 +333,7 @@ export default class App extends Component {
 				</DeckGL>
 				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 					country={this.state.countryCovidData} date={this.state.date} /> : ''}
-				<Chapters {...config} currentChapterID={this.state.currentChapter.id} />
+				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
 				<HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />
 				<Footer />
 			</div>

@@ -23,6 +23,7 @@ export default function Chapter({
   theme,
   text,
   currentChapterID,
+  covidData,
   slide = false,
   alignment = "left",
 }) {
@@ -34,6 +35,11 @@ export default function Chapter({
   return (
     <div id={id} className={classList + ' card'}>
       <div className={theme}>
+        {text ? <div className='flex baseline text-row'>
+          <p>Confirmed: {covidData.Confirmed}</p>
+          <p>Deaths: {covidData.Deaths} </p>
+          <p>Recovered: {covidData.Recovered} </p>
+        </div> : ''}
         {text ? <ReactMarkdown source={text} /> : <DummyText />}
       </div>
     </div>
