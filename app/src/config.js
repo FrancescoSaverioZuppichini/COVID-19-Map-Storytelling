@@ -147,13 +147,14 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		{
 			id: '11',
 			location: {
-				longitude:  9.86052,
-				latitude: 27.91264 ,
-				zoom: 2,
+				longitude:  119.20476,
+				latitude: 10.76389,
+				zoom: 5,
 				pitch: 0,
 				bearing: 0
 			},
-			duration: 3000
+			duration: 3000,
+			countries: ['Philippines']
 		},
 		{
 			id: '12',
@@ -187,7 +188,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 				bearing: 0
 			},
 			duration: 3000,
-			countries: [ 'United States of America' ]
+			countries: [ 'US' ]
 		},
 		{
 			id: '15',
@@ -200,8 +201,41 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			},
 			duration: 3000
 		},
+		{
+			id: '16',
+			location: {
+				longitude: 102.63073,
+				latitude: 35.53723,
+				zoom: 3,
+				pitch: 0,
+				bearing: 0
+			},
+		},
+		{
+			id: '17',
+			location: {
+				longitude: 113.49339,
+				latitude: 30.66588,
+				zoom: 6,
+				pitch: 30,
+				bearing: 0
+			},
+		},
+		{
+			id: '18',
+			location: {
+				longitude:  -114.95366,
+				latitude: 55.91607,
+				zoom: 3.8,
+				pitch: 0,
+				bearing: 0
+			},
+			countries: [ 'Canada' ]
 
+		},
 	]
 }
+
+// https://demos.mapbox.com/location-helper/
 
 export default config

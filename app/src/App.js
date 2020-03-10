@@ -71,6 +71,7 @@ export default class App extends Component {
 		 */
 		const firstLine = text.split('\n')[0]
 		let date = moment(firstLine, 'DD-MM-YYYY')
+		console.log(date.format('DD-MM-YYYY'))
 		date = date.isValid() ? date : undefined
 		return date
 	}
@@ -84,7 +85,6 @@ export default class App extends Component {
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
 		// if not new date, use the last one
 		const date = chapter.date === undefined ? this.state.date : chapter.date
-		console.log(date)
 		this.setState({
 			currentChapter: chapter,
 			date: date,
@@ -200,14 +200,12 @@ export default class App extends Component {
 		const DATA_URL = '/api/v1/data/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'
 		const url = `${DATA_URL}${dateFormat}.csv`
 		const csvParser = csv()
-
 		return axios
 			.get(url)
 			.then(({ data }) => data)
 			.then((data) => csvParser.fromString(data))
 			.then((data) => aggregateRegion(data, 'US'))
 			.then((data) => {
-				console.log('new data', data)
 				const totalCovidData = aggregateAll(data)
 				this.setState({ data, totalCovidData })
 			})
