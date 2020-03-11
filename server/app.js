@@ -6,18 +6,21 @@ const logger = require("morgan")
 const PORT = process.env.PORT || "8080"
 
 const DATA_URl = "https://raw.githubusercontent.com/"
-
 app = express()
 
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, "public")))
-
 app.use("/api/v1/data/", proxy(DATA_URl))
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/index.html'))
+})
+
 
 app.listen({ port: PORT }, () =>
   console.log(
-    `🚀 Server ready at http://localhost:${PORT}`
+    `🚀 Server ready at http://localhost:${PORT} in ${process.env.NODE_ENV}`
   )
 )
