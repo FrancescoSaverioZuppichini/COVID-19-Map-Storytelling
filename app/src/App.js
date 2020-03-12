@@ -32,7 +32,7 @@ export default class App extends Component {
 		isFlyingToFullMap: false,
 		isFlyingFromFullMap: false,
 		isInFullMap: false, // used to know where we hare in the full map mode
-		date: moment("01-02-2020", 'DD-MM-YYYY'),
+		date: config.chapters[0].date,
 		data: [],
 		totalCovidData: {},
 		countryCovidData: {},
@@ -236,7 +236,7 @@ export default class App extends Component {
 				// if we have a new location we want to move to it
 				if (chapter.location) {
 					this.setChapterLocation(chapter)
-					this.getDataFromDate(this.state.date)
+					if(this.state.date) this.getDataFromDate(this.state.date)
 
 				} else {
 					this.setState({
