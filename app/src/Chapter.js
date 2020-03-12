@@ -35,7 +35,6 @@ export default function Chapter({
   return (
     <div id={id} className={classList + ' card'}>
       <div className={theme}>
-      {text ? <small>{`#${id}`}</small> : ''}
         {text ? <div className='flex baseline'>
           {covidData.Confirmed > 0 ?
             <div className='flex baseline text-row'><p>Confirmed: {covidData.Confirmed}</p>
