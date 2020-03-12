@@ -236,7 +236,8 @@ export default class App extends Component {
 				// if we have a new location we want to move to it
 				if (chapter.location) {
 					this.setChapterLocation(chapter)
-					if(this.state.date) this.getDataFromDate(this.state.date)
+					console.log(this.chapter.date)
+					if(this.chapter.date) this.getDataFromDate(this.chapter.date)
 
 				} else {
 					this.setState({

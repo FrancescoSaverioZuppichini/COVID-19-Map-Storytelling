@@ -30,6 +30,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		},
 		{
 			id: '1',
+			date: "31-12-2019",
 			location: {
 				longitude: 114.301859,
 				latitude: 30.592357,
