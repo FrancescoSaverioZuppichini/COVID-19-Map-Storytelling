@@ -18,7 +18,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 	footer: 'Source: source citations, etc.',
 	chapters: [
 		{
-			id: '0', // file name
+			id: 0,
+			subChapter: '0',
 			location: {
 				longitude: 102.63073,
 				latitude: 35.53723,
@@ -29,8 +30,9 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			countries: [ 'China' ],
 		},
 		{
-			id: '1',
+			id: 1,
 			date: "31-12-2019",
+			subChapter: '0',
 			location: {
 				longitude: 114.301859,
 				latitude: 30.592357,
@@ -41,7 +43,9 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
             duration: 4000,
 		},
 		{
-			id: '2',
+			id: 2,
+			date: "02-01-2020",
+			subChapter: '0',
 			location: {
 				longitude: 114.275273,
 				latitude: 30.66588,
@@ -55,7 +59,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			}
 		},
 		{
-			id: '3',
+			id: 3,
 			location: {
 				longitude:  9.86052,
 				latitude: 27.91264 ,
@@ -68,7 +72,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
         },
         
         {
-			id: '4',
+			id: 4,
 			location: {
 				longitude: 114.258286,
 				latitude: 30.617847,
@@ -82,7 +86,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			},
 		},
 		{
-			id: '5',
+			id: 5,
 			location: {
 				longitude: 104.68358,
 				latitude: 33.21781,
@@ -93,7 +97,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			duration: 3000,
 		},
 		{
-			id: '6',
+			id: 6,
 			location: {
 				longitude: -117.60365,
 				latitude: 34.05862,
@@ -108,11 +112,11 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			duration: 5000,
 		},
 		{
-			id: '7',
+			id: 7,
 			slide: true
         },
         {
-			id: '8',
+			id: 8,
 			location: {
 				longitude:  114.275273,
 				latitude: 30.66588,
@@ -123,7 +127,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			duration: 2000,
         },
         {
-			id: '9',
+			id: 9,
 			location: {
 				longitude:   7.33942,
 				latitude: 50.81065,
@@ -135,7 +139,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
             countries: [ 'Germany']
         },
         {
-			id: '10',
+			id: 10,
 			location: {
 				longitude:   7.33942,
 				latitude: 50.81065,
@@ -146,7 +150,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
             countries: [ 'Germany']
 		},
 		{
-			id: '11',
+			id: 11,
 			location: {
 				longitude:  119.20476,
 				latitude: 10.76389,
@@ -158,7 +162,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			countries: ['Philippines']
 		},
 		{
-			id: '12',
+			id: 12,
 			location: {
 				longitude:  9.86052,
 				latitude: 27.91264 ,
@@ -169,7 +173,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			duration: 1000
 		},
 		{
-			id: '13',
+			id: 13,
 			location: {
 				longitude: 139.56233,
 				latitude: 35.43110 ,
@@ -180,7 +184,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			duration: 4000
 		},
 		{
-			id: '14',
+			id: 14,
 			location: {
 				longitude:  -107.68517,
 				latitude: 38.67691 ,
@@ -192,7 +196,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			countries: [ 'US' ]
 		},
 		{
-			id: '15',
+			id: 15,
 			location: {
 				longitude:  -107.68517,
 				latitude: 38.67691 ,
@@ -203,7 +207,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			duration: 3000
 		},
 		{
-			id: '16',
+			id: 16,
 			location: {
 				longitude: 102.63073,
 				latitude: 35.53723,
@@ -213,7 +217,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			},
 		},
 		{
-			id: '17',
+			id: 17,
 			location: {
 				longitude: 113.49339,
 				latitude: 30.66588,
@@ -223,7 +227,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 			},
 		},
 		{
-			id: '18',
+			id: 18,
 			location: {
 				longitude:  -114.95366,
 				latitude: 55.91607,

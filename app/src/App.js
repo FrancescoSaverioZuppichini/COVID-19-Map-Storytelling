@@ -64,18 +64,6 @@ export default class App extends Component {
 
 	}
 
-	extractDateFromChapter = ({ text }) => {
-		/***
-		 * In the markdown files with the text we have the data in the first line has DD-MM-YYYY. 
-		 * This function extract the date from the text and store it in the app state
-		 */
-		const firstLine = text.split('\n')[0]
-		let date = moment(firstLine, 'DD-MM-YYYY')
-		console.log(date.format('DD-MM-YYYY'))
-		date = date.isValid() ? date : undefined
-		return date
-	}
-
 	setChapterLocation = (chapter) => {
 		/***
 		 * This function sets the given chapter as current chapter. This implies updating the location and the date.
@@ -227,17 +215,19 @@ export default class App extends Component {
 			.onStepEnter(async (response) => {
 				// TODO this should go inside a method like loadChapter
 				// we want to find out chapter and then move to it
-				let chapter = config.chapters.find((chap) => chap.id === response.element.id)
-				// TODO would be nice to preload the text or show some loading content on the card
-				const { data } = await axios.get(`/chapters/${chapter.id}.md`)
+				let chapter = config.chapters[response.element.id]
+				// conver the date using moment
+				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : undefined
+				// parse the date
+				const date = chapter.date ? chapter.date.format('DD-MM-YYYY') + '-' : ''
+				const { data } = await axios.get(`/chapters/${date}${chapter.subChapter}.md`)
 				// update chapter obj
 				chapter.text = data
-				chapter.date = this.extractDateFromChapter(chapter)
+				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : chapter.date
 				// if we have a new location we want to move to it
 				if (chapter.location) {
 					this.setChapterLocation(chapter)
-					console.log(this.chapter.date)
-					if(this.chapter.date) this.getDataFromDate(this.chapter.date)
+					if(chapter.date) this.getDataFromDate(chapter.date)
 
 				} else {
 					this.setState({
