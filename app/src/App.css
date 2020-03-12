@@ -164,3 +164,13 @@ a:visited {
   background-color: #bdc1c6;
   padding: 10px;
 }
+
+
+@media only screen and (max-width: 600px) {
+  .step {
+    padding-left: 0px;
+    padding-right: 0px;
+
+    width: auto
+  }
+}
