@@ -19,7 +19,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 	chapters: [
 		{
 			id: 0,
-			subChapter: '0',
+			name: '0',
 			location: {
 				longitude: 102.63073,
 				latitude: 35.53723,
@@ -32,7 +32,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		{
 			id: 1,
 			date: "31-12-2019",
-			subChapter: '0',
+			name: '0',
 			location: {
 				longitude: 114.301859,
 				latitude: 30.592357,
@@ -45,7 +45,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		{
 			id: 2,
 			date: "02-01-2020",
-			subChapter: '0',
+			name: '0',
 			location: {
 				longitude: 114.275273,
 				latitude: 30.66588,
@@ -60,6 +60,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		},
 		{
 			id: 3,
+			date: "22-01-2020",
+			name: '0',
 			location: {
 				longitude:  9.86052,
 				latitude: 27.91264 ,
@@ -73,6 +75,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
         
         {
 			id: 4,
+			date: "22-01-2020",
+			name: '1',
 			location: {
 				longitude: 114.258286,
 				latitude: 30.617847,
@@ -87,6 +91,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		},
 		{
 			id: 5,
+			date: '27-01-2020',
+			name: '0',
 			location: {
 				longitude: 104.68358,
 				latitude: 33.21781,
@@ -98,6 +104,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		},
 		{
 			id: 6,
+			date: '27-01-2020',
+			name: '1',
 			location: {
 				longitude: -117.60365,
 				latitude: 34.05862,
@@ -113,10 +121,13 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		},
 		{
 			id: 7,
+			name: 'first-patients',
 			slide: true
         },
         {
 			id: 8,
+			date: '29-01-2020',
+			name: '0',
 			location: {
 				longitude:  114.275273,
 				latitude: 30.66588,
@@ -128,6 +139,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
         },
         {
 			id: 9,
+			date: '29-01-2020',
+			name: '1',
 			location: {
 				longitude:   7.33942,
 				latitude: 50.81065,
@@ -140,6 +153,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
         },
         {
 			id: 10,
+			date: ' 31-01-2020',
+			name: '0',
 			location: {
 				longitude:   7.33942,
 				latitude: 50.81065,
@@ -151,6 +166,8 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 		},
 		{
 			id: 11,
+			date: '02-02-2020',
+			name: '0',
 			location: {
 				longitude:  119.20476,
 				latitude: 10.76389,

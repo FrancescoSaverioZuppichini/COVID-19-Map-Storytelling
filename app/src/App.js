@@ -220,7 +220,7 @@ export default class App extends Component {
 				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : undefined
 				// parse the date
 				const date = chapter.date ? chapter.date.format('DD-MM-YYYY') + '-' : ''
-				const { data } = await axios.get(`/chapters/${date}${chapter.subChapter}.md`)
+				const { data } = await axios.get(`/chapters/${date}${chapter.name}.md`)
 				// update chapter obj
 				chapter.text = data
 				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : chapter.date
