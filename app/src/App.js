@@ -40,6 +40,7 @@ export default class App extends Component {
 	}
 
 	componentDidMount() {
+		
 		// get all data as soon as the component is ready
 		const geoDatas = [axios.get('/countries-small.geojson'), axios.get('/china-provinces.geojson')]
 
@@ -212,6 +213,7 @@ export default class App extends Component {
 				progress: true
 			})
 			.onStepEnter(async (response) => {
+				console.log('diocane')
 				// TODO this should go inside a method like loadChapter
 				// we want to find out chapter and then move to it
 				let chapter = config.chapters[response.element.id]
@@ -297,8 +299,8 @@ export default class App extends Component {
 
 		return (
 			<div>
-				<Title {...config} />
-				<DeckGL
+				{/* <Title {...config} /> */}
+				{/* <DeckGL
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
@@ -318,7 +320,7 @@ export default class App extends Component {
 								''
 							)}
 					</StaticMap>
-				</DeckGL>
+				</DeckGL> */}
 				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 					country={this.state.countryCovidData} date={this.state.date} /> : ''}
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
