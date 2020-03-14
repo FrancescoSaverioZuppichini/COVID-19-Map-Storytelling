@@ -15,7 +15,7 @@ We decided to tell the story of the new pandemic known as *corona virus* (COVID-
 	title: 'COVID-19',
 	subtitle: 'A story told by maps',
 	byline: 'By a Francesco Saverio Zuppichini and Riccardo Pisoni',
-	footer: 'Source: source citations, etc.',
+	footer: 'COVID-19 Map story',
 	chapters: [
 		{
 			id: 0,

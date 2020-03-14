@@ -25,6 +25,7 @@ a:visited {
   position: relative;
   text-align: center;
 }
+
 #footer {
   width: 100%;
   min-height: 5vh;
@@ -169,9 +170,6 @@ a:visited {
 
   }
 
-  .text-row {
-    flex-direction: column;
-  }
 
   .slide {
     padding: 0;

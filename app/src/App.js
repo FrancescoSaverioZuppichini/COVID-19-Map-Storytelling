@@ -39,8 +39,47 @@ export default class App extends Component {
 		geoCountries: []
 	}
 
+	scroller = scrollama()
+
 	componentDidMount() {
-		
+		/**
+		 * Here we setup `scrollama` used to 
+		 * update the chapters when we scroll down/up.
+		 */
+
+		window.addEventListener("resize", () => this.scroller.resize())
+		this.scroller
+			.setup({
+				step: '.step',
+				offset: 0.5,
+				progress: true
+			})
+			.onStepEnter(async (response) => {
+				// TODO this should go inside a method like loadChapter
+				// we want to find out chapter and then move to it
+				let chapter = config.chapters[response.element.id]
+				// conver the date using moment
+				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : undefined
+				// parse the date
+				const date = chapter.date ? chapter.date.format('DD-MM-YYYY') + '-' : ''
+				const { data } = await axios.get(`/chapters/${date}${chapter.name}.md`)
+				// update chapter obj
+				chapter.text = data
+				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : chapter.date
+				// if we have a new location we want to move to it
+				if (chapter.location) {
+					this.setChapterLocation(chapter)
+					if (chapter.date) this.getDataFromDate(chapter.date)
+
+				} else {
+					this.setState({
+						currentChapter: chapter,
+						isInFullMap: false
+					})
+				}
+			})
+			.onStepExit(() => { })
+
 		// get all data as soon as the component is ready
 		const geoDatas = [axios.get('/countries-small.geojson'), axios.get('/china-provinces.geojson')]
 
@@ -78,11 +117,9 @@ export default class App extends Component {
 			isInFullMap: false,
 			viewState: {
 				...chapter.location,
-				...{
-					transitionEasing: transitions[chapter.transition || 'ease'],
-					transitionDuration: duration || 1000,
-					transitionInterpolator: new FlyToInterpolator()
-				}
+				transitionEasing: transitions[chapter.transition || 'ease'],
+				transitionDuration: duration || 1000,
+				transitionInterpolator: new FlyToInterpolator()
 			}
 		})
 	}
@@ -196,49 +233,9 @@ export default class App extends Component {
 				const totalCovidData = aggregateAll(data)
 				this.setState({ data, totalCovidData })
 			})
-			.catch( e => console.error(e))
+			.catch(e => console.error(e))
 	}
 
-	mapOnLoad = () => {
-		/**
-		 * This function is called when the map is loaded. Here we setup `scrollama` used to 
-		 * update the chapters when we scroll down/up.
-		 */
-		const scroller = scrollama()
-
-		scroller
-			.setup({
-				step: '.step',
-				offset: 0.2,
-				progress: true
-			})
-			.onStepEnter(async (response) => {
-				console.log('diocane')
-				// TODO this should go inside a method like loadChapter
-				// we want to find out chapter and then move to it
-				let chapter = config.chapters[response.element.id]
-				// conver the date using moment
-				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : undefined
-				// parse the date
-				const date = chapter.date ? chapter.date.format('DD-MM-YYYY') + '-' : ''
-				const { data } = await axios.get(`/chapters/${date}${chapter.name}.md`)
-				// update chapter obj
-				chapter.text = data
-				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : chapter.date
-				// if we have a new location we want to move to it
-				if (chapter.location) {
-					this.setChapterLocation(chapter)
-					if(chapter.date) this.getDataFromDate(chapter.date)
-
-				} else {
-					this.setState({
-						currentChapter: chapter,
-						isInFullMap: false
-					})
-				}
-			})
-			.onStepExit(() => { })
-	}
 
 	onHazardButton = () => {
 		/***
@@ -299,8 +296,8 @@ export default class App extends Component {
 
 		return (
 			<div>
-				{/* <Title {...config} /> */}
-				{/* <DeckGL
+				<Title {...config} />
+				<DeckGL
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
@@ -310,7 +307,6 @@ export default class App extends Component {
 					<StaticMap
 						mapStyle="mapbox://styles/zuppif/ck7dq0q6x1hwo1inu7n734ou1"
 						mapboxApiAccessToken={config.accessToken}
-						onLoad={this.mapOnLoad}
 					>
 						{this.state.currentChapter.marker && !this.state.isInFullMap ? (
 							<Marker {...this.state.currentChapter.marker}>
@@ -320,12 +316,12 @@ export default class App extends Component {
 								''
 							)}
 					</StaticMap>
-				</DeckGL> */}
+				</DeckGL>
 				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 					country={this.state.countryCovidData} date={this.state.date} /> : ''}
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
 				{this.state.date && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
-				<Footer />
+				<Footer {...config} />
 			</div>
 		)
 	}
