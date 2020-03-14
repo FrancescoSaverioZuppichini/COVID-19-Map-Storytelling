@@ -7,6 +7,7 @@ import scrollama from 'scrollama'
 import { GeoJsonLayer } from '@deck.gl/layers'
 import axios from 'axios'
 import { Marker } from 'react-map-gl'
+import { isIOS13 } from "react-device-detect"
 import moment from 'moment'
 import csv from 'csvtojson'
 import { aggregateAll, aggregateRegion, transitions, WORLD_COORDINATE } from './utils.js'
@@ -23,6 +24,15 @@ const initialViewState = {
 	pitch: 0,
 	bearing: 0
 }
+
+
+const ErrorMap = ({theme}) => (<div className="card centered">
+	<div className={theme}>
+		<h2>Map is not supported on iOS.</h2>
+		<h4>(no stable WebGL2)</h4>
+		Please open the website from a computer or an Android phone to see the dynamic map.
+		</div>
+</div>)
 
 
 export default class App extends Component {
@@ -297,7 +307,8 @@ export default class App extends Component {
 		return (
 			<div>
 				<Title {...config} />
-				<DeckGL
+				{isIOS13 && <ErrorMap {...config} />}
+				{!isIOS13 && <DeckGL
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
@@ -316,7 +327,7 @@ export default class App extends Component {
 								''
 							)}
 					</StaticMap>
-				</DeckGL>
+				</DeckGL>}
 				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 					country={this.state.countryCovidData} date={this.state.date} /> : ''}
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
