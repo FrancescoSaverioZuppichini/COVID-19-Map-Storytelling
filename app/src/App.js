@@ -71,11 +71,9 @@ export default class App extends Component {
 		// if we are scrolling up we want to keep the previos animation duration
 		const weAreGoingBack = this.state.currentChapter.id > chapter.id
 		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
-		// if not new date, use the last one
-		const date = chapter.date === undefined ? this.state.date : chapter.date
 		this.setState({
 			currentChapter: chapter,
-			date: date,
+			date: chapter.date,
 			isInFullMap: false,
 			viewState: {
 				...chapter.location,
