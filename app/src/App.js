@@ -323,7 +323,7 @@ export default class App extends Component {
 				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 					country={this.state.countryCovidData} date={this.state.date} /> : ''}
 				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
-				<HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />
+				{this.state.date && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
 				<Footer />
 			</div>
 		)
