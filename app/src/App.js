@@ -195,6 +195,7 @@ export default class App extends Component {
 				const totalCovidData = aggregateAll(data)
 				this.setState({ data, totalCovidData })
 			})
+			.catch( e => console.error(e))
 	}
 
 	mapOnLoad = () => {
@@ -207,7 +208,7 @@ export default class App extends Component {
 		scroller
 			.setup({
 				step: '.step',
-				offset: 0.5,
+				offset: 0.2,
 				progress: true
 			})
 			.onStepEnter(async (response) => {
