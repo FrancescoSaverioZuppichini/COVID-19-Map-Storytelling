@@ -19,10 +19,9 @@ a:visited {
 }
 
 #header {
-  margin: 3vh auto;
+  margin: auto;
   width: 90vw;
   padding: 2vh;
-  z-index: 99;
   position: relative;
   text-align: center;
 }

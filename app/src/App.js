@@ -26,7 +26,7 @@ const initialViewState = {
 }
 
 
-const ErrorMap = ({theme}) => (<div className="card centered">
+const ErrorMap = ({theme}) => (<div className="card" style={{margin: '2vh'}}>
 	<div className={theme}>
 		<h2>Map is not supported on iOS.</h2>
 		<h4>(no stable WebGL2)</h4>
@@ -127,6 +127,7 @@ export default class App extends Component {
 			isInFullMap: false,
 			viewState: {
 				...chapter.location,
+				totalCovidData: {},
 				transitionEasing: transitions[chapter.transition || 'ease'],
 				transitionDuration: duration || 1000,
 				transitionInterpolator: new FlyToInterpolator()
@@ -243,7 +244,7 @@ export default class App extends Component {
 				const totalCovidData = aggregateAll(data)
 				this.setState({ data, totalCovidData })
 			})
-			.catch(e => console.error(e))
+			.catch(e => this.setState({ data: {}, totalCovidData: {} }))
 	}
 
 
@@ -306,7 +307,6 @@ export default class App extends Component {
 
 		return (
 			<div>
-				<Title {...config} />
 				{isIOS13 && <ErrorMap {...config} />}
 				{!isIOS13 && <DeckGL
 					viewState={this.state.viewState}
@@ -328,11 +328,12 @@ export default class App extends Component {
 							)}
 					</StaticMap>
 				</DeckGL>}
-				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
-					country={this.state.countryCovidData} date={this.state.date} /> : ''}
-				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
-				{this.state.date && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
-				<Footer {...config} />
+					<Title {...config} />
+					{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
+						country={this.state.countryCovidData} date={this.state.date} /> : ''}
+					<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
+					{this.state.date && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
+					<Footer {...config} />
 			</div>
 		)
 	}
