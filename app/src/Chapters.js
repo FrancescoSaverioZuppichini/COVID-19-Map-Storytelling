@@ -5,8 +5,10 @@ export default function Chapters({ chapters, theme, currentChapterID, covidData 
 	return (
 		<div id="story">
 			<div id="features">
-				{chapters.map((chapter) => (
-					<Chapter key={chapter.id} theme={theme} {...chapter} currentChapterID={currentChapterID} covidData={covidData}/>
+				{chapters.map((chapter, idx) => (
+					<Chapter key={idx} theme={theme} {...chapter} 
+					currentChapterID={currentChapterID}
+					covidData={covidData}/>
 				))}
 			</div>
 		</div>

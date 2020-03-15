@@ -64,10 +64,12 @@ export default class App extends Component {
 				offset: 0.5,
 				progress: true
 			})
-			.onStepEnter(async (response) => {
+			.onStepEnter(async ({ element, index, direction }) => {
+				console.log(direction)
 				// TODO this should go inside a method like loadChapter
 				// we want to find out chapter and then move to it
-				let chapter = config.chapters[response.element.id]
+				let chapter = config.chapters[index]
+				chapter.id = index
 				// conver the date using moment
 				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : undefined
 				// parse the date
@@ -78,7 +80,7 @@ export default class App extends Component {
 				chapter.date = chapter.date ? moment(chapter.date, 'DD-MM-YYYY') : chapter.date
 				// if we have a new location we want to move to it
 				if (chapter.location) {
-					this.setChapterLocation(chapter)
+					this.setChapterLocation(chapter, direction)
 					if (chapter.date) this.getDataFromDate(chapter.date)
 
 				} else {
@@ -114,13 +116,13 @@ export default class App extends Component {
 
 	}
 
-	setChapterLocation = (chapter) => {
+	setChapterLocation = (chapter, direction) => {
 		/***
 		 * This function sets the given chapter as current chapter. This implies updating the location and the date.
 		 */
 		// if we are scrolling up we want to keep the previos animation duration
 		const weAreGoingBack = this.state.currentChapter.id > chapter.id
-		let duration = weAreGoingBack ? this.state.currentChapter.duration : chapter.duration
+		let duration = direction == 'down' ? this.state.currentChapter.duration : chapter.duration
 		this.setState({
 			currentChapter: chapter,
 			date: chapter.date,
