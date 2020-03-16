@@ -36,9 +36,9 @@ var config = {
 	theme: 'light',
 	alignment: 'left',
 	header: `# COVID-19 A story told by maps
-*By a Francesco Saverio Zuppichini and Riccardo Pisoni*
+*By a [Francesco Saverio Zuppichini](https://www.linkedin.com/in/francesco-saverio-zuppichini-94659a150/) and [Riccardo Pisoni](https://www.linkedin.com/in/riccardo-pisoni/)*
 
-We deco tell the story of the new pandemic known as *corona virus* (COV using maps. At any time you can press the button on the down right with the hazard icon to see all the cases on the story's date in the world.
+We decided to tell the story of the new pandemic known as *corona virus* using maps. When the data is available, you can click the button on the downright with the hazard icon to see all the cases on the story's date in the worldwide. To start reading, just scroll down.
 
 **Behind each number there is a person**, remember it.
 	`,

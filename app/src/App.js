@@ -246,7 +246,7 @@ export default class App extends Component {
 				const totalCovidData = aggregateAll(data)
 				this.setState({ data, totalCovidData })
 			})
-			.catch(e => this.setState({ data: {}, totalCovidData: {} }))
+			.catch(e => this.setState({ data: [], totalCovidData: {} }))
 	}
 
 
@@ -307,6 +307,7 @@ export default class App extends Component {
 			? this.getCovidGeoLayer()
 			: this.getChapterGeoLayer(this.state.currentChapter)
 
+		const thereIsData = this.state.data.length > 0
 		return (
 			<div>
 				{isIOS13 && <ErrorMap {...config} />}
@@ -334,7 +335,7 @@ export default class App extends Component {
 					{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 						country={this.state.countryCovidData} date={this.state.date} /> : ''}
 					<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
-					{this.state.date && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
+					{thereIsData && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
 					<Footer {...config} />
 			</div>
 		)

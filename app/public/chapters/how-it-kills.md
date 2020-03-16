@@ -1,4 +1,4 @@
-## Coronavirus: how it kills
+## How the virus kills
 
 Of the original 41 people admitted to the hospital. 6 have died by Acute Respiratory Distress Syndrome (ARDS).
 
