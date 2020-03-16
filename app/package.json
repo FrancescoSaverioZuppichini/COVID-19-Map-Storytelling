@@ -15,6 +15,7 @@
     "mapbox-gl": "1.5.0",
     "moment": "^2.24.0",
     "react": "^16.9.0",
+    "react-device-detect": "^1.11.14",
     "react-dom": "^16.9.0",
     "react-map-gl": "^5.2.3",
     "react-markdown": "^4.3.1",
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && rm -rf ../server/public && mv ./build ../server/public",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
