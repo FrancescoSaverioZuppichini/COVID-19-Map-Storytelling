@@ -1,0 +1,11 @@
+## How the virus kills
+
+Of the original 41 people admitted to the hospital. 6 have died by Acute Respiratory Distress Syndrome (ARDS).
+
+ARDS is also the main cause of death from normal flu. 
+The virus generates inflammation in the lungs that hinder the normal oxygen flow between the alveoli and the bloodstream. At this stage, the only cure is to assist the patient with respiratory machines.
+
+
+![alt](https://cdn.britannica.com/s:700x500/04/100104-050-9C3C04EB/Emphysema-walls-alveoli-oxygen-intake-loss-lungs.jpg)
+
+For a deep dive into the topic we suggest the [this](https://www.nejm.org/doi/10.1056/NEJM200005043421801?url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org&rfr_dat=cr_pub%3Dwww.ncbi.nlm.nih.gov) article. 
