@@ -398,6 +398,15 @@ We decided to tell the story of the new pandemic known as *corona virus* using m
 			duration: 2000
 		},
 		{
+			date: '18-02-2020',
+			name: '1',
+			location: {
+				...CHINA,
+				zoom: 5
+			},
+			duration: 2000
+		},
+		{
 			date: '19-02-2020',
 			name: '0',
 			location: {
@@ -411,7 +420,43 @@ We decided to tell the story of the new pandemic known as *corona virus* using m
 			location: {
 				...WUHAN,
 				pitch: 30
-			}
+			},
+			duration: 2000
+		},
+		{
+			date: '19-02-2020',
+			name: '2',
+			location: {
+				longitude: 50.82968, // iran
+				latitude: 34.64190,
+				pitch: 30,
+				zoom: 12
+			},
+			duration: 3000
+		},
+		{
+			date: '20-02-2020',
+			name: '0',
+			location: {
+				longitude: 135.76208, // japan
+				latitude: 36.16785,
+				pitch: 0,
+				zoom: 6.5
+			},
+			duration: 2000
+
+		},
+
+			{
+			date: '21-02-2020',
+			name: '0',
+			location: {
+				...CHINA,
+				pitch: 30,
+				zoom: 5
+			},
+			duration: 1000
+
 		},
 	]
 }
