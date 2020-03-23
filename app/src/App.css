@@ -3,7 +3,7 @@ body {
   padding: 0;
   font-family: sans-serif;
   overflow:visible;
-  background: #0f0c29; 
+  background: #182636; 
   }
 a,
 a:hover,
@@ -28,9 +28,9 @@ a:visited {
 
 #footer {
   width: 100%;
-  min-height: 5vh;
-  padding-top: 2vh;
-  padding-bottom: 2vh;
+  margin-top: 10vh;
+  padding-top: 24px;
+  padding-bottom: 24px;
   text-align: center;
   line-height: 25px;
   font-size: 1em;

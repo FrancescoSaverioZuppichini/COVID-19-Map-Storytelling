@@ -261,7 +261,7 @@ export default class App extends Component {
 				zoom: 2,
 				...{
 					transitionEasing: transitions['ease'],
-					transitionDuration: 2000,
+					transitionDuration: 1000,
 					transitionInterpolator: new FlyToInterpolator()
 				}
 			}
@@ -275,7 +275,7 @@ export default class App extends Component {
 				isFlyingFromFullMap: false,
 				isInFullMap: true,
 			})
-			setTimeout(() => this.setState({ isFlyingToFullMap: false }), 2000)
+			setTimeout(() => this.setState({ isFlyingToFullMap: false }), 1000)
 
 		} else {
 			// TODO we should also ask and get the text/process the data!!
@@ -335,7 +335,7 @@ export default class App extends Component {
 					{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
 						country={this.state.countryCovidData} date={this.state.date} /> : ''}
 					<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
-					{thereIsData && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
+					{(thereIsData && !this.state.currentChapter.slide) && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
 					<Footer {...config} />
 			</div>
 		)
