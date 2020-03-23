@@ -29,6 +29,31 @@ const VANCOUVER = {
 
 }
 
+const ITALY = {
+	longitude: 8.40116,
+	latitude: 41.93058,
+	zoom: 5.7
+
+}
+
+const ITALY_LOMBARDIA = {
+	longitude: 9.36140,
+	latitude: 45.44450,
+	zoom: 9
+}
+
+const SOUTH_KOREA = {
+	longitude: 126.13641,
+	latitude: 36.35097,
+	zoom: 7
+}
+
+const IRAN = {
+	longitude: 50.32829,
+	latitude: 32.13723,
+	zoom: 5.5
+}
+
 var config = {
 	style: 'mapbox://styles/mapbox/dark-v10',
 	accessToken: 'pk.eyJ1IjoienVwcGlmIiwiYSI6ImNqdm96Z3d2ejFibG80OXZuZWdwMWgyemwifQ.aFnHrPBYUqnYcK2jAwzAZA',
@@ -447,7 +472,7 @@ We decided to tell the story of the new pandemic known as *corona virus* using m
 
 		},
 
-			{
+		{
 			date: '21-02-2020',
 			name: '0',
 			location: {
@@ -458,6 +483,90 @@ We decided to tell the story of the new pandemic known as *corona virus* using m
 			duration: 1000
 
 		},
+		{
+			date: '24-02-2020',
+			name: '0',
+			location: {
+				...ITALY,
+			},
+			duration: 2000,
+			countries: ['Italy']
+
+		},
+		{
+			date: '24-02-2020',
+			name: '1',
+			location: {
+				...SOUTH_KOREA,
+				pitch: 30
+			},
+			duration: 2000,
+		},
+		{
+			date: '24-02-2020',
+			name: '2',
+			location: {
+				...WORLD,
+			},
+			duration: 3000,
+		},
+		{
+			date: '25-02-2020',
+			name: '0',
+			location: {
+				...IRAN,
+			},
+			duration: 2000,
+		},
+		{
+			date: '25-02-2020',
+			name: '1',
+			location: {
+				longitude: 115.91456, // Beijing
+				latitude: 39.93091,
+				pitch: 30, 
+				zoom: 8
+			},
+			duration: 2000,
+		}, {
+			date: '25-02-2020',
+			name: '2',
+			location: {
+				longitude: -122.37943, // USA
+				latitude: 40.34222,
+				pitch: 0,
+				zoom: 3.5
+			},
+			duration: 1000,
+		}, {
+			date: '26-02-2020',
+			name: '0',
+			location: {
+				longitude: -74.19077, // New York
+				latitude: 40.76601,
+				pitch: 30,
+				zoom: 10
+			},
+			duration: 1000,
+		},
+		{
+			date: '27-02-2020',
+			name: '0',
+			location: {
+				longitude: -121.69039, // California
+				latitude: 36.85746,
+				zoom: 6
+			},
+			duration: 3000,
+		},
+		{
+			date: '27-02-2020',
+			name: '1',
+			location: {
+				...CHINA
+			},
+			duration: 3000,
+		}
 	]
 }
 
