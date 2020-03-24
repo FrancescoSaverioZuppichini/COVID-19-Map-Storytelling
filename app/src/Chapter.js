@@ -42,7 +42,7 @@ export default function Chapter({
               <p>Recovered: {covidData.Recovered} </p>  </div> : ''}
           <div className='flex--grow'></div>
         </div> : ''}
-        {text ? <ReactMarkdown source={text} /> : <DummyText />}
+        {text ? <ReactMarkdown source={text} escapeHtml={false} /> : <DummyText />}
       </div>
     </div>
   )
