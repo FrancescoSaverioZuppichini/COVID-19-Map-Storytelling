@@ -6,7 +6,7 @@ export default function CovidDataInfo({ total = {}, country = {}, date }) {
     <div id='covidDataInfo' className="card light">
       <div>
         <p>Cases on {date.format('DD-MM-YYYY')}</p>
-        <p>{country.name}</p>
+        <p>{country.name}</p> 
         {/* <h1>{total.Confirmed}</h1> */}
         <div>
           <div className='flex baseline text-row'>
