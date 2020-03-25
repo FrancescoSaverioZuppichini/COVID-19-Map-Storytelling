@@ -26,7 +26,7 @@ const initialViewState = {
 }
 
 
-const ErrorMap = ({theme}) => (<div className="card" style={{margin: '2vh'}}>
+const ErrorMap = ({ theme }) => (<div className="card" style={{ margin: '2vh' }}>
 	<div className={theme}>
 		<h2>Map is not supported on iOS.</h2>
 		<h4>(no stable WebGL2)</h4>
@@ -152,6 +152,7 @@ export default class App extends Component {
 		const layer = new GeoJsonLayer({
 			id: 'geojson-layer',
 			data: data,
+			visible: !this.state.isInFullMap,
 			pickable: true,
 			filled: true,
 			extruded: true,
@@ -160,7 +161,7 @@ export default class App extends Component {
 			getFillColor: [155, 0, 0, 100],
 			getRadius: 100,
 			getLineWidth: 1,
-			getElevation: 30
+			// getElevation: 30
 		})
 
 		return layer
@@ -188,6 +189,7 @@ export default class App extends Component {
 			pickable: true,
 			stroked: true,
 			filled: true,
+			visible: this.state.isInFullMap && !this.state.isFlyingToFullMap,
 			getFillColor: (d) => {
 				// base color is transparent
 				let colour = [0, 0, 0, 0]
@@ -303,9 +305,7 @@ export default class App extends Component {
 	}
 
 	render() {
-		const geoLayer = this.state.isInFullMap && !this.state.isFlyingToFullMap
-			? this.getCovidGeoLayer()
-			: this.getChapterGeoLayer(this.state.currentChapter)
+		const layers = [this.getCovidGeoLayer(), this.getChapterGeoLayer(this.state.currentChapter)]
 
 		const thereIsData = this.state.data.length > 0
 		return (
@@ -315,7 +315,7 @@ export default class App extends Component {
 					viewState={this.state.viewState}
 					onViewStateChange={this.onViewStateChange}
 					controller={MapController}
-					layers={[geoLayer]}
+					layers={layers}
 					style={this.mapStyle()}
 				>
 					<StaticMap
@@ -331,12 +331,12 @@ export default class App extends Component {
 							)}
 					</StaticMap>
 				</DeckGL>}
-					<Title {...config} />
-					{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
-						country={this.state.countryCovidData} date={this.state.date} /> : ''}
-					<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
-					{(thereIsData && !this.state.currentChapter.slide) && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
-					<Footer {...config} />
+				<Title {...config} />
+				{this.state.isInFullMap ? <CovidDataInfo total={this.state.totalCovidData}
+					country={this.state.countryCovidData} date={this.state.date} /> : ''}
+				<Chapters {...config} currentChapterID={this.state.currentChapter.id} covidData={this.state.totalCovidData} />
+				{(thereIsData && !this.state.currentChapter.slide) && <HazardButton theme={config.theme} onClick={this.onHazardButton} isInFullMap={this.state.isInFullMap} />}
+				<Footer {...config} />
 			</div>
 		)
 	}

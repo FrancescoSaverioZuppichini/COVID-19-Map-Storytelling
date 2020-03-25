@@ -65,10 +65,16 @@ a:visited {
   top: 24px;
   right: 24px;
   min-width: 300px;
+
+}
+
+#covidDataInfo > p {
+  margin: 0;
 }
 
 .text-row > * {
-  margin: 4px;
+  margin-right: 4px;
+  margin: 2px;
 }
 
 .flex {
@@ -115,13 +121,13 @@ a:visited {
 }
 
 .card > div {
-  padding: 25px 50px;
+  padding: 50px;
   line-height: 25px;
   font-size: 1em;
 }
 
-.step img {
-  width: 100%;
+.step  img {
+  max-width: 100%;
 }
 
 .slide {
@@ -178,6 +184,12 @@ a:visited {
     /* margin: 0; */
     width: 100vw;
     min-height: 50vh;
+  }
+
+  .card > div {
+    padding: 28px;
+    line-height: 25px;
+    font-size: 1em;
   }
 }
 
